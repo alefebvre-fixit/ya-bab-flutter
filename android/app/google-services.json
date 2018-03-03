@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "238586731409",
+    "firebase_url": "https://ya-bab.firebaseio.com",
+    "project_id": "ya-bab",
+    "storage_bucket": "ya-bab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238586731409:android:04d624f3d319b783",
+        "android_client_info": {
+          "package_name": "com.yaapp.yabab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "238586731409-vtamfo3g2pbvsk7aue11ucbb7ulkqlt4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yaapp.yabab",
+            "certificate_hash": "2bc83ef27ce1ee11b8f952aa8535a52d5ccc664d"
+          }
+        },
+        {
+          "client_id": "238586731409-hns8o0f58tndmcc4mg675rsc6vhhhf0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY8HfvNr5_NEn977VFPg6uP7xO-SmggcM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "238586731409-hns8o0f58tndmcc4mg675rsc6vhhhf0t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
