@@ -1,67 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';                   // new
-import 'dart:async';                                               // new
-import 'package:firebase_auth/firebase_auth.dart';                // new
-import 'package:firebase_database/firebase_database.dart';         //new
+import 'package:google_sign_in/google_sign_in.dart'; // new
+import 'dart:async'; // new
+import 'package:firebase_auth/firebase_auth.dart'; // new
+import 'package:firebase_database/firebase_database.dart'; //new
 import 'package:firebase_database/ui/firebase_animated_list.dart'; //new
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yabab/group.dart';
-
+import 'package:yabab/match.dart';
+import 'package:yabab/user.dart';
 
 final googleSignIn = new GoogleSignIn();
-final auth = FirebaseAuth.instance;                              // new
+final auth = FirebaseAuth.instance; // new
 
 final reference = Firestore.instance.collection('groups');
-
-
-
-
 
 void main() => runApp(new MyApp());
 
 Future<Null> _ensureLoggedIn() async {
   GoogleSignInAccount user = googleSignIn.currentUser;
-  if (user == null)
-    user = await googleSignIn.signInSilently();
+  if (user == null) user = await googleSignIn.signInSilently();
   if (user == null) {
     await googleSignIn.signIn();
   }
-  if (await auth.currentUser() == null) {                          //new
-    GoogleSignInAuthentication credentials =                       //new
-    await googleSignIn.currentUser.authentication;                 //new
-    await auth.signInWithGoogle(                                   //new
-      idToken: credentials.idToken,                                //new
-      accessToken: credentials.accessToken,                        //new
-    );                                                             //new
-  }                                                               //new
+  if (await auth.currentUser() == null) {
+    //new
+    GoogleSignInAuthentication credentials = //new
+        await googleSignIn.currentUser.authentication; //new
+    await auth.signInWithGoogle(
+      //new
+      idToken: credentials.idToken, //new
+      accessToken: credentials.accessToken, //new
+    ); //new
+  } //new
 }
-
-class BookList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new StreamBuilder(
-      stream: Firestore.instance.collection('groups').snapshots,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return new Text('Loading...');
-        return new ListView(
-          children: snapshot.data.documents.map((document) {
-            return new Container(
-              padding: new EdgeInsets.all(20.0),
-                child:new GroupCard(
-                  new Group.fromDocument(document)
-              )
-            );
-          }).toList(),
-        );
-      },
-    );
-  }
-}
-
-
-
-
-
 
 
 
@@ -83,16 +54,15 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       home: new MyHomePage(title: 'Flutter Demo Home Page'),
-      routes: <String, WidgetBuilder> { //5
-        '/screen1': (BuildContext context) => new MyHomePage(title: 'Flutter Demo Home Page'), //6
-        '/screen2' : (BuildContext context) => new GroupWidget() //7
+      routes: <String, WidgetBuilder>{
+        //5
+        '/screen1': (BuildContext context) =>
+            new MyHomePage(title: 'Flutter Demo Home Page'), //6
+        '/screen2': (BuildContext context) => new GroupWidget(null) //7
       },
     );
   }
 }
-
-
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -116,7 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   Future _incrementCounter() async {
-
     await _ensureLoggedIn();
 
     setState(() {
@@ -128,6 +97,10 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+
+  /// This controller can be used to programmatically
+  /// set the current displayed page
+  PageController _pageController;
 
   @override
   Widget build(BuildContext context) {
@@ -143,9 +116,28 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: new Text(widget.title),
       ),
-      body: new BookList(),
+      body: new PageView(children: [
+        new GroupListPage(),
+        new MatchMakingListPage(),
+        new UserListPage()
+      ], controller: _pageController),
+      bottomNavigationBar: new BottomNavigationBar(
+        items: [
+          new BottomNavigationBarItem(
+              icon: new Icon(Icons.add), title: new Text("trends")),
+          new BottomNavigationBarItem(
+              icon: new Icon(Icons.location_on), title: new Text("feed")),
+          new BottomNavigationBarItem(
+              icon: new Icon(Icons.people), title: new Text("community"))
+        ],
 
-      
+        /// Will be used to scroll to the next page
+        /// using the _pageController
+        onTap: navigationTapped,
+      ),
+
+      // body: new BookList(),
+
 //      body: new Center(
 //        // Center is a layout widget. It takes a single child and positions it
 //        // in the middle of the parent.
@@ -177,20 +169,40 @@ class _MyHomePageState extends State<MyHomePage> {
 //      ),
       floatingActionButton: new FloatingActionButton(
         //onPressed: _incrementCounter,
-            onPressed:(){
-        button1(context);
+        onPressed: () {
+          button1(context);
         },
 
-      tooltip: 'Increment',
+        tooltip: 'Increment',
         child: new Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
-
     );
+  }
+
+  /// Called when the user presses on of the
+  /// [BottomNavigationBarItem] with corresponding
+  /// page index
+  void navigationTapped(int page) {
+    // Animating to the page.
+    // You can use whatever duration and curve you like
+    _pageController.animateToPage(page,
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = new PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 }
 
-
-void button1(BuildContext context){
+void button1(BuildContext context) {
   print("Button 1"); //1
   Navigator.of(context).pushNamed('/screen2'); //2
 }

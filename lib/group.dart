@@ -26,6 +26,25 @@ class Group {
   }
 }
 
+class GroupListPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new StreamBuilder(
+      stream: Firestore.instance.collection('groups').snapshots,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return new Text('Loading...');
+        return new ListView(
+          children: snapshot.data.documents.map((document) {
+            return new Container(
+                padding: new EdgeInsets.all(20.0),
+                child: new GroupCard(new Group.fromDocument(document)));
+          }).toList(),
+        );
+      },
+    );
+  }
+}
+
 class GroupWidget extends StatelessWidget {
 
   Group group;
