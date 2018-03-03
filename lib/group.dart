@@ -65,7 +65,7 @@ class GroupWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             new RaisedButton(onPressed: () {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(null);
             }, child: new Text("Back to Screen 1"),)
           ],
         ),
