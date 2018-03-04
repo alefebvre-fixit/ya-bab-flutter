@@ -34,21 +34,21 @@ class MatchMakingListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return new Text('displayName');
+    //return new Text('displayName');
 
-//    return new StreamBuilder(
-//      stream: Firestore.instance.collection('users').snapshots,
-//      builder: (context, snapshot) {
-//        if (!snapshot.hasData) return new Text('Loading...');
-//        return new ListView(
-//          children: snapshot.data.documents.map((document) {
-//            return new Container(
-//                padding: new EdgeInsets.all(20.0),
-//                child: new Text(document['displayName']));
-//          }).toList(),
-//        );
-//      },
-//    );
+    return new StreamBuilder(
+      stream: Firestore.instance.collection('match-makings').snapshots,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return new Text('Loading...');
+        return new ListView(
+          children: snapshot.data.documents.map((document) {
+            return new Container(
+                padding: new EdgeInsets.all(20.0),
+                child: new Text('Hello'));
+          }).toList(),
+        );
+      },
+    );
 
 
 

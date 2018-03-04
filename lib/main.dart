@@ -34,8 +34,6 @@ Future<Null> _ensureLoggedIn() async {
   } //new
 }
 
-
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -83,20 +81,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  Future _incrementCounter() async {
-    await _ensureLoggedIn();
-
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  /// Indicating the current displayed page
+  /// 0: leagues
+  /// 1: match
+  /// 2: users
+  int _page = 0;
 
   /// This controller can be used to programmatically
   /// set the current displayed page
@@ -111,72 +100,30 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return new Scaffold(
-      appBar: new AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: new Text(widget.title),
-      ),
-      body: new PageView(children: [
-        new GroupListPage(),
-        new MatchMakingListPage(),
-        new UserListPage()
-      ], controller: _pageController),
-      bottomNavigationBar: new BottomNavigationBar(
-        items: [
-          new BottomNavigationBarItem(
-              icon: new Icon(Icons.add), title: new Text("trends")),
-          new BottomNavigationBarItem(
-              icon: new Icon(Icons.location_on), title: new Text("feed")),
-          new BottomNavigationBarItem(
-              icon: new Icon(Icons.people), title: new Text("community"))
-        ],
+        appBar: new AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: new Text(widget.title),
+        ),
+        body: new PageView(children: [
+          new GroupListPage(),
+          new MatchMakingListPage(),
+          new UserListPage()
+        ], controller: _pageController, onPageChanged: onPageChanged),
+        bottomNavigationBar: new BottomNavigationBar(
+            items: [
+              new BottomNavigationBarItem(
+                  icon: new Icon(Icons.add), title: new Text("Leagues")),
+              new BottomNavigationBarItem(
+                  icon: new Icon(Icons.location_on), title: new Text("Match")),
+              new BottomNavigationBarItem(
+                  icon: new Icon(Icons.people), title: new Text("Users"))
+            ],
 
-        /// Will be used to scroll to the next page
-        /// using the _pageController
-        onTap: navigationTapped,
-      ),
-
-      // body: new BookList(),
-
-//      body: new Center(
-//        // Center is a layout widget. It takes a single child and positions it
-//        // in the middle of the parent.
-//        child: new Column(
-//          // Column is also layout widget. It takes a list of children and
-//          // arranges them vertically. By default, it sizes itself to fit its
-//          // children horizontally, and tries to be as tall as its parent.
-//          //
-//          // Invoke "debug paint" (press "p" in the console where you ran
-//          // "flutter run", or select "Toggle Debug Paint" from the Flutter tool
-//          // window in IntelliJ) to see the wireframe for each widget.
-//          //
-//          // Column has various properties to control how it sizes itself and
-//          // how it positions its children. Here we use mainAxisAlignment to
-//          // center the children vertically; the main axis here is the vertical
-//          // axis because Columns are vertical (the cross axis would be
-//          // horizontal).
-//          mainAxisAlignment: MainAxisAlignment.center,
-//          children: <Widget>[
-//            new Text(
-//              'You have pushed the button this many times:',
-//            ),
-//            new Text(
-//              '$_counter',
-//              style: Theme.of(context).textTheme.display1,
-//            ),
-//          ],
-//        ),
-//      ),
-      floatingActionButton: new FloatingActionButton(
-        //onPressed: _incrementCounter,
-        onPressed: () {
-          button1(context);
-        },
-
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+            /// Will be used to scroll to the next page
+            /// using the _pageController
+            onTap: navigationTapped,
+            currentIndex: _page));
   }
 
   /// Called when the user presses on of the
@@ -187,6 +134,12 @@ class _MyHomePageState extends State<MyHomePage> {
     // You can use whatever duration and curve you like
     _pageController.animateToPage(page,
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      this._page = page;
+    });
   }
 
   @override
@@ -200,9 +153,4 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
     _pageController.dispose();
   }
-}
-
-void button1(BuildContext context) {
-  print("Button 1"); //1
-  Navigator.of(context).pushNamed('/screen2'); //2
 }

@@ -95,7 +95,19 @@ class GroupCard extends StatelessWidget {
             subtitle: const Text(
                 'Music by Julie Gable. Lyrics by Sidney Stein.'),
           ),
-          new ButtonTheme
+          new Image.asset(
+            'assets/images/babyfoot.jpg',
+            width: 600.0,
+            height: 240.0,
+            fit: BoxFit.cover,
+          ),
+
+
+
+
+
+
+    new ButtonTheme
               .bar( // make buttons use the appropriate styles for cards
             child: new ButtonBar(
               children: <Widget>[
