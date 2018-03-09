@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; // new
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yabab/users/user.model.dart';
-
-
+import 'package:yabab/users/user.page.dart';
 
 class UserListPage extends StatelessWidget {
   @override
@@ -22,9 +20,7 @@ class UserListPage extends StatelessWidget {
   }
 }
 
-
 class UserListTile extends StatelessWidget {
-
   User user;
 
   UserListTile(User user) {
@@ -34,19 +30,25 @@ class UserListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new ListTile(
-      onTap: () => {},
+      onTap: () => _navigateToUserDetails(this.user, context),
       leading: new Hero(
         tag: user.id,
         child: new CircleAvatar(
-          backgroundImage: new NetworkImage(user.getAvatarURL()),
+          backgroundImage: new NetworkImage(user.avatar),
         ),
       ),
       title: new Text(user.name),
       subtitle: new Text(user.email),
     );
   }
-
-
-
 }
 
+_navigateToUserDetails(User user, BuildContext context) {
+  Navigator.of(context).push(
+    new MaterialPageRoute(
+      builder: (c) {
+        return new UserDetailsPage(user);
+      },
+    ),
+  );
+}
