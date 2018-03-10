@@ -19,6 +19,8 @@ dev_dependencies:
   firebase_database: 0.3.6                                       # new
   firebase_storage: 0.1.4                                         # new
   cloud_firestore: 0.2.10
+  community_material_icon: 0.1.2                                  #https://pub.dartlang.org/packages/community_material_icon
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

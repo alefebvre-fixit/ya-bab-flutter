@@ -9,6 +9,8 @@ import 'package:yabab/groups/group-list.page.dart';
 import 'package:yabab/groups/group.page.dart';
 import 'package:yabab/match/match.dart';
 import 'package:yabab/users/user-list.page.dart';
+import 'package:community_material_icon/community_material_icon.dart';
+
 
 final googleSignIn = new GoogleSignIn();
 final auth = FirebaseAuth.instance; // new
@@ -114,9 +116,9 @@ class _MyHomePageState extends State<MyHomePage> {
         bottomNavigationBar: new BottomNavigationBar(
             items: [
               new BottomNavigationBarItem(
-                  icon: new Icon(Icons.add), title: new Text("Leagues")),
+                  icon: new Icon(CommunityMaterialIcons.trophy), title: new Text("Leagues")),
               new BottomNavigationBarItem(
-                  icon: new Icon(Icons.location_on), title: new Text("Match")),
+                  icon: new Icon(CommunityMaterialIcons.soccer_field), title: new Text("Match")),
               new BottomNavigationBarItem(
                   icon: new Icon(Icons.people), title: new Text("Users"))
             ],

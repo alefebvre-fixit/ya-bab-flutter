@@ -13,23 +13,66 @@ class GroupWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Group" + group.name),
-      ),
-      body: new Center(
-        child: new Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        body: new Column(
           children: <Widget>[
-            new RaisedButton(
-              onPressed: () {
-                Navigator.of(context).pop(null);
+            new PhotoHero(
+              photo: 'assets/images/babyfoot.jpg',
+              onTap: () {
+                Navigator.of(context).pop();
               },
-              child: new Text("Back to Screen 1"),
-            )
+            ),
+            new Container(
+              padding: const EdgeInsets.all(16.0),
+              child: new Row(
+                  children: <Widget>[
+                    new Flexible(
+                      child: new Text(group.name),
+                    ),
+                    new IconButton(
+                      icon: new Icon(Icons.favorite),
+                      onPressed: () {}
+                    ),
+
+                  ]
+              ),
+            ),
+            new Container(
+                padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                child: new Text('some tet here')
+            ),
           ],
-        ),
+        )
+    );
+
+
+  }
+}
+
+class PhotoHero extends StatelessWidget {
+  const PhotoHero({ Key key, this.photo, this.onTap, this.width }) : super(key: key);
+
+  final String photo;
+  final VoidCallback onTap;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return new SizedBox(
+      child: new Hero(
+          tag: photo,
+          child: new Material(
+            color: Colors.transparent,
+            child: new InkWell(
+              onTap: onTap,
+              child: new Image.asset(
+                photo,
+                fit: BoxFit.cover,
+              ),
+            ),
+          )
       ),
     );
   }

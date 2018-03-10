@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yabab/users/user.model.dart';
 import 'package:yabab/users/user.page.dart';
+import 'package:yabab/users/user.service.dart';
 
 class UserListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StreamBuilder(
-      stream: Firestore.instance.collection('users').snapshots,
+      stream:  UserService.instance.findAllAsSnapshot(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return new Text('Loading...');
         return new ListView(
