@@ -12,9 +12,18 @@ class GroupWidget extends StatelessWidget {
     this.group = group;
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
+//        appBar: new AppBar(
+//          // Here we take the value from the MyHomePage object that was created by
+//          // the App.build method, and use it to set our appbar title.
+//          title: new Text('some text'),
+//        ),
         body: new Column(
       children: <Widget>[
         new GroupDetailHeader(group),
@@ -62,20 +71,57 @@ class GroupDetailHeader extends StatelessWidget {
     }
 
     var photo = new PhotoHero(
-      photo: 'assets/images/babyfoot.jpg',
+      photo: BACKGROUND_IMAGE,
     );
+
+    var theme = Theme.of(context);
+    var textTheme = theme.textTheme;
+
+    var locationInfo = new Row(
+      children: [
+        new Icon(
+          Icons.place,
+          color: Colors.white,
+          size: 16.0,
+        ),
+        new Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: new Text(
+            'Somewhere',
+            style: textTheme.subhead.copyWith(color: Colors.white),
+          ),
+        ),
+      ],
+    );
+
+
+    var title = new Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        new Text(
+          group.name,
+          style: textTheme.display1.copyWith(color: Colors.white),
+        ),
+        new Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: locationInfo,
+        ),
+
+
+      ],
+    );
+
+
 
     return new Stack(
       children: [
         photo,
-        new Align(
-          alignment: FractionalOffset.bottomCenter,
-          heightFactor: 1.4,
-          child: new Column(
-            children: [
-              new Text('some tet here')
-            ],
-          ),
+        new Positioned(
+          bottom: 26.0,
+          left: 26.0,
+          child:
+          title
+
         ),
         new Positioned(
           bottom: 26.0,
@@ -110,7 +156,7 @@ class ColoredImage extends StatelessWidget {
           gradient: new LinearGradient(
             begin: const Alignment(0.0, -1.0),
             end: const Alignment(0.0, 0.6),
-            colors: <Color>[color, color.withAlpha(64)],
+            colors: <Color>[color.withAlpha(100), color.withAlpha(64)],
           ),
         ),
         child: image,
@@ -137,7 +183,7 @@ class PhotoHero extends StatelessWidget {
                   photo,
                   fit: BoxFit.cover,
                 ),
-                color: Colors.green,
+                color: Colors.black,
               ),
             ),
           )),
