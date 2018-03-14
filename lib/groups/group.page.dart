@@ -23,6 +23,8 @@ class GroupWidget extends StatelessWidget {
 //          // Here we take the value from the MyHomePage object that was created by
 //          // the App.build method, and use it to set our appbar title.
 //          title: new Text('some text'),
+//            toolbarOpacity : 0.9,
+//            bottomOpacity: 0.5
 //        ),
         body: new Column(
       children: <Widget>[
@@ -55,7 +57,7 @@ class GroupDetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     _createPillButton(
       String text, {
-      Color backgroundColor = Colors.blueAccent,
+      Color backgroundColor = Colors.lightGreen,
       Color textColor = Colors.white,
     }) {
       return new ClipRRect(
@@ -116,6 +118,22 @@ class GroupDetailHeader extends StatelessWidget {
     return new Stack(
       children: [
         photo,
+        new AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+            toolbarOpacity : 0.9,
+            bottomOpacity: 0.0,
+            backgroundColor: Colors.red.withAlpha(0),
+          actions: <Widget>[
+            new IconButton(
+              icon: const Icon(Icons.create),
+              tooltip: 'Edit',
+              onPressed: () {
+
+              },
+            )
+          ],
+        ),
         new Positioned(
           bottom: 26.0,
           left: 26.0,
@@ -131,11 +149,11 @@ class GroupDetailHeader extends StatelessWidget {
             textColor: Colors.white70,
           ),
         ),
-        new Positioned(
-          top: 26.0,
-          left: 4.0,
-          child: new BackButton(color: Colors.white),
-        ),
+//        new Positioned(
+//          top: 26.0,
+//          left: 4.0,
+//          child: new BackButton(color: Colors.white),
+//        ),
       ],
     );
   }
