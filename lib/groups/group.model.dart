@@ -4,20 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Group {
 
-  String name;
-  String location;
-
-  String id;
+  final String name;
+  final String location;
+  final String id;
 
 
   Group({this.id, this.name, this.location});
 
-  factory Group.fromDocument(DocumentSnapshot json) {
+  factory Group.fromDocument(DocumentSnapshot document) {
     return new Group(
-      id: json['id'],
-      name: json['name'],
-      location: json['location'],
-
+      id: document.documentID,
+      name: document['name'],
+      location: document['location'],
     );
   }
 
@@ -25,7 +23,6 @@ class Group {
 
     var result = new Map<String, dynamic>();
 
-    result.putIfAbsent("id", () {return this.id;});
     result.putIfAbsent("name", () {return this.name;});
     result.putIfAbsent("location", () {return this.location;});
 
