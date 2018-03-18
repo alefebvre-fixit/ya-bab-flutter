@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:yabab/leagues/league.model.dart';
 
 class LeagueService {
@@ -42,4 +43,31 @@ class LeagueService {
       return create(league);
     }
   }
+
+  Future<bool> isNotFollowing(String leagueId){
+    return Firestore.instance.collection('groups/' + leagueId + '/followers').where('follower', isEqualTo: "XZYg8mMKrmS9xjVtn7yIScuMp622").snapshots.first.then((query){
+      return query.documents.isEmpty;
+  });
+    //return Firestore.instance.collection('groups/' + leagueId + '/followers').snapshots.isEmpty;
+  }
+
+  Future<void> follow(String leagueId){
+    return FirebaseAuth.instance.currentUser().then((user){
+      return Firestore.instance.collection('groups/' + leagueId + '/followers').add({"follower": "XZYg8mMKrmS9xjVtn7yIScuMp622"});
+    });
+  }
+
+  Future<void> unfollow(String leagueId){
+  return FirebaseAuth.instance.currentUser().then((user){
+  return Firestore.instance.collection('groups/' + leagueId + '/followers').where('follower', isEqualTo: "XZYg8mMKrmS9xjVtn7yIScuMp622").snapshots.first.then((query){
+    query.documents.forEach((document){document.reference.delete();});
+  });
+      return Firestore.instance.collection('groups/' + leagueId + '/followers/').document("XZYg8mMKrmS9xjVtn7yIScuMp622").setData({"follower": "XZYg8mMKrmS9xjVtn7yIScuMp622"});
+  });
+  }
+
+
+
+
+
 }

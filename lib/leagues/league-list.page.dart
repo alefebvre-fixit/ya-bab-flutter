@@ -34,11 +34,9 @@ class LeagueList extends StatelessWidget {
 }
 
 class LeagueCard extends StatelessWidget {
-  League league;
+  final League league;
 
-  LeagueCard(League league) {
-    this.league = league;
-  }
+  LeagueCard(this.league);
 
   // This widget is the root of your application.
   @override
@@ -50,8 +48,7 @@ class LeagueCard extends StatelessWidget {
           new ListTile(
             leading: const Icon(CommunityMaterialIcons.trophy),
             title: new Text(league.name),
-            subtitle:
-                new Text('@' + league.location),
+            subtitle: new Text('@' + league.location),
           ),
           new Image.asset(
             'assets/images/babyfoot.jpg',

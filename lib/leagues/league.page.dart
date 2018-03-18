@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'package:yabab/leagues/create-league.page.dart';
+import 'package:yabab/leagues/league-follow.button.dart';
 import 'package:yabab/leagues/league.model.dart';
 
 final reference = Firestore.instance.collection('leagues');
 
 class LeagueWidget extends StatelessWidget {
-  League league;
+  final League league;
 
-  LeagueWidget(League league) {
-    this.league = league;
-  }
+  LeagueWidget(this.league);
 
   @override
   Widget build(BuildContext context) {
@@ -45,23 +44,6 @@ class LeagueDetailHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _createPillButton(
-      String text, {
-      Color backgroundColor = Colors.lightGreen,
-      Color textColor = Colors.white,
-    }) {
-      return new ClipRRect(
-        borderRadius: new BorderRadius.circular(30.0),
-        child: new MaterialButton(
-          minWidth: 140.0,
-          color: backgroundColor,
-          textColor: textColor,
-          onPressed: () {},
-          child: new Text(text),
-        ),
-      );
-    }
-
     var photo = new PhotoHero(
       photo: BACKGROUND_IMAGE,
     );
@@ -123,13 +105,7 @@ class LeagueDetailHeader extends StatelessWidget {
         ),
         new Positioned(bottom: 26.0, left: 26.0, child: title),
         new Positioned(
-          bottom: 26.0,
-          right: 26.0,
-          child: _createPillButton(
-            'FOLLOW',
-            textColor: Colors.white70,
-          ),
-        )
+            bottom: 26.0, right: 26.0, child: new LeagueFollowButton(league))
       ],
     );
   }

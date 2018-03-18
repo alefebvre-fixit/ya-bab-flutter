@@ -65,6 +65,8 @@ class _LeagueFormWidgetState extends State<CreateLeagueWidget> {
 
   _navigateToLeague(League league) {
     Navigator
+        .of(context).pop();
+    Navigator
         .of(context)
         .push(new MaterialPageRoute<Null>(builder: (BuildContext context) {
       return new LeagueWidget(league);
