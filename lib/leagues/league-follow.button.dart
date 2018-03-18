@@ -86,11 +86,9 @@ class _FollowButtonState extends State<LeagueFollowButton> {
 
   @override
   void initState() {
-    LeagueService.instance
-        .isNotFollowing(this.league.id)
-        .then((isNotFollowing) {
+    LeagueService.instance.isFollowing(this.league.id).then((isFollowing) {
       setState(() {
-        following = !isNotFollowing;
+        following = isFollowing;
         status = following ? 'Followed' : 'Follow';
       });
     });
