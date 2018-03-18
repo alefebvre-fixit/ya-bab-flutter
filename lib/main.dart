@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart'; // new
 import 'package:firebase_database/firebase_database.dart'; //new
 import 'package:firebase_database/ui/firebase_animated_list.dart'; //new
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:yabab/groups/group-list.page.dart';
-import 'package:yabab/groups/group.page-bckp.dart';
+import 'package:yabab/leagues/create-league.page.dart';
+import 'package:yabab/leagues/league-list.page.dart';
 import 'package:yabab/match/match.dart';
 import 'package:yabab/users/user-list.page.dart';
 import 'package:community_material_icon/community_material_icon.dart';
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Ya-Bab',
       theme: new ThemeData(
         // This is the theme of your application.
         //
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         //5
         '/screen1': (BuildContext context) =>
             new MyHomePage(title: 'Flutter Demo Home Page'), //6
-        '/screen2': (BuildContext context) => new GroupWidget(null) //7
+        //'/screen2': (BuildContext context) => new LeagueWidget(null) //7
       },
     );
   }
@@ -82,6 +82,9 @@ class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => new _MyHomePageState();
 }
+
+enum YaBabAction { createLeague }
+
 
 class _MyHomePageState extends State<MyHomePage> {
   /// Indicating the current displayed page
@@ -106,10 +109,26 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: new AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
-          title: new Text(widget.title),
-        ),
+          title: new Text('Ya-Bab'),
+          actions: <Widget>[
+            new PopupMenuButton<YaBabAction>(
+              onSelected: (YaBabAction value) =>
+                  Navigator.of(context).push(new MaterialPageRoute<Null>(
+                    builder: (BuildContext context) {
+                      return new CreateLeagueWidget();
+                    },
+                  )),
+              itemBuilder: (BuildContext context) =>
+              <PopupMenuEntry<YaBabAction>>[
+                const PopupMenuItem<YaBabAction>(
+                  value: YaBabAction.createLeague,
+                  child: const Text('Create new League'),
+                ),
+              ],
+            )
+          ]),
         body: new PageView(children: [
-          new GroupListPage(),
+          new LeagueListPage(),
           new MatchMakingListPage(),
           new UserListPage()
         ], controller: _pageController, onPageChanged: onPageChanged),

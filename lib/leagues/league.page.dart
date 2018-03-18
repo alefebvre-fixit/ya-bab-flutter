@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
-import 'package:yabab/groups/group.model.dart';
+import 'package:yabab/leagues/league.model.dart';
 
-final reference = Firestore.instance.collection('groups');
+final reference = Firestore.instance.collection('leagues');
 
-class GroupWidget extends StatelessWidget {
-  Group group;
+class LeagueWidget extends StatelessWidget {
+  League league;
 
-  GroupWidget(Group group) {
-    this.group = group;
+  LeagueWidget(League league) {
+    this.league = league;
   }
 
 
@@ -28,12 +28,12 @@ class GroupWidget extends StatelessWidget {
 //        ),
         body: new Column(
       children: <Widget>[
-        new GroupDetailHeader(group),
+        new LeagueDetailHeader(league),
         new Container(
           padding: const EdgeInsets.all(16.0),
           child: new Row(children: <Widget>[
             new Flexible(
-              child: new Text(group.name),
+              child: new Text(league.name),
             ),
             new IconButton(icon: new Icon(Icons.favorite), onPressed: () {}),
           ]),
@@ -46,12 +46,12 @@ class GroupWidget extends StatelessWidget {
   }
 }
 
-class GroupDetailHeader extends StatelessWidget {
+class LeagueDetailHeader extends StatelessWidget {
   static const BACKGROUND_IMAGE = 'assets/images/babyfoot.jpg';
 
-  GroupDetailHeader(this.group);
+  LeagueDetailHeader(this.league);
 
-  final Group group;
+  final League league;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +89,7 @@ class GroupDetailHeader extends StatelessWidget {
         new Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: new Text(
-            'Somewhere',
+            league.location,
             style: textTheme.subhead.copyWith(color: Colors.white),
           ),
         ),
@@ -101,7 +101,7 @@ class GroupDetailHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         new Text(
-          group.name,
+          league.name,
           style: textTheme.display1.copyWith(color: Colors.white),
         ),
         new Padding(

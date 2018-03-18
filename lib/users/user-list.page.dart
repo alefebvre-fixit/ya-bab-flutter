@@ -7,8 +7,15 @@ import 'package:yabab/users/user.service.dart';
 class UserListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return new UserList();
+  }
+}
+
+class UserList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return new StreamBuilder(
-      stream:  UserService.instance.findAllAsSnapshot(),
+      stream: UserService.instance.findAllAsSnapshot(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return new Text('Loading...');
         return new ListView(

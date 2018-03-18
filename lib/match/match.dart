@@ -4,7 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MatchMakingListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return new MatchMakingList();
+  }
+}
 
+class MatchMakingList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     //return new Text('displayName');
 
     return new StreamBuilder(
@@ -14,14 +20,10 @@ class MatchMakingListPage extends StatelessWidget {
         return new ListView(
           children: snapshot.data.documents.map((document) {
             return new Container(
-                padding: new EdgeInsets.all(20.0),
-                child: new Text('Hello'));
+                padding: new EdgeInsets.all(20.0), child: new Text('Hello'));
           }).toList(),
         );
       },
     );
-
-
-
   }
 }

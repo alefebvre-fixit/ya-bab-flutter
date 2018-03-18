@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
-import 'package:yabab/groups/group.model.dart';
+import 'package:yabab/leagues/league.model.dart';
 
 final reference = Firestore.instance.collection('groups');
 
-class GroupWidget extends StatefulWidget {
-  Group group;
+class LeagueWidget extends StatefulWidget {
+  League group;
 
-  GroupWidget(Group group) {
+  LeagueWidget(League group) {
     this.group = group;
   }
 
@@ -19,7 +19,7 @@ class GroupWidget extends StatefulWidget {
 
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
-class ContactsDemoState extends State<GroupWidget> {
+class ContactsDemoState extends State<LeagueWidget> {
 
   static const BACKGROUND_IMAGE = 'assets/images/babyfoot.jpg';
 
