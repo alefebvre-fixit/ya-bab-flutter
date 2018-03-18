@@ -1,11 +1,18 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:yabab/leagues/league.model.dart';
+import 'package:yabab/leagues/league.page.dart';
 import 'package:yabab/leagues/league.service.dart';
 
 class CreateLeagueWidget extends StatefulWidget {
+  League league;
+
+  CreateLeagueWidget(League league) {
+    this.league = league;
+  }
+
   @override
-  _LeagueFormWidgetState createState() => new _LeagueFormWidgetState();
+  _LeagueFormWidgetState createState() => new _LeagueFormWidgetState(league);
 }
 
 class LeagueForm {
@@ -15,6 +22,16 @@ class LeagueForm {
 }
 
 class _LeagueFormWidgetState extends State<CreateLeagueWidget> {
+  League league;
+
+  _LeagueFormWidgetState(League league) {
+    if (league != null) {
+      _leagueForm.name = league.name;
+      _leagueForm.location = league.location;
+      _leagueForm.id = league.id;
+    }
+  }
+
   final formKey = new GlobalKey<FormState>();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -26,13 +43,32 @@ class _LeagueFormWidgetState extends State<CreateLeagueWidget> {
     if (form.validate()) {
       form.save();
 
-      League group = new League(
+      League league = new League(
           name: _leagueForm.name,
           id: _leagueForm.id,
           location: _leagueForm.location);
 
-      LeagueService.instance.upsert(group);
+      if (league.id != null) {
+        LeagueService.instance
+            .update(league)
+            .then((value) => LeagueService.instance.findOne(_leagueForm.id))
+            .then((league) => _navigateToLeague(league));
+      } else {
+        LeagueService.instance
+            .create(league)
+            .then((document) =>
+                LeagueService.instance.findOne(document.documentID))
+            .then((league) => _navigateToLeague(league));
+      }
     }
+  }
+
+  _navigateToLeague(League league) {
+    Navigator
+        .of(context)
+        .push(new MaterialPageRoute<Null>(builder: (BuildContext context) {
+      return new LeagueWidget(league);
+    }));
   }
 
 //  void _performLogin(BuildContext context) {

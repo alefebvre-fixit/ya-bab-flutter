@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
+import 'package:yabab/leagues/create-league.page.dart';
 import 'package:yabab/leagues/league.model.dart';
 
 final reference = Firestore.instance.collection('leagues');
@@ -12,20 +13,9 @@ class LeagueWidget extends StatelessWidget {
     this.league = league;
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
-//        appBar: new AppBar(
-//          // Here we take the value from the MyHomePage object that was created by
-//          // the App.build method, and use it to set our appbar title.
-//          title: new Text('some text'),
-//            toolbarOpacity : 0.9,
-//            bottomOpacity: 0.5
-//        ),
         body: new Column(
       children: <Widget>[
         new LeagueDetailHeader(league),
@@ -96,7 +86,6 @@ class LeagueDetailHeader extends StatelessWidget {
       ],
     );
 
-
     var title = new Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,39 +97,31 @@ class LeagueDetailHeader extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4.0),
           child: locationInfo,
         ),
-
-
       ],
     );
-
-
 
     return new Stack(
       children: [
         photo,
         new AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-            toolbarOpacity : 0.9,
-            bottomOpacity: 0.0,
-            backgroundColor: Colors.red.withAlpha(0),
+          toolbarOpacity: 0.9,
+          bottomOpacity: 0.0,
+          backgroundColor: Colors.red.withAlpha(0),
           actions: <Widget>[
             new IconButton(
               icon: const Icon(Icons.create),
               tooltip: 'Edit',
               onPressed: () {
-
+                Navigator.of(context).push(new MaterialPageRoute<Null>(
+                  builder: (BuildContext context) {
+                    return new CreateLeagueWidget(league);
+                  },
+                ));
               },
             )
           ],
         ),
-        new Positioned(
-          bottom: 26.0,
-          left: 26.0,
-          child:
-          title
-
-        ),
+        new Positioned(bottom: 26.0, left: 26.0, child: title),
         new Positioned(
           bottom: 26.0,
           right: 26.0,
@@ -148,12 +129,7 @@ class LeagueDetailHeader extends StatelessWidget {
             'FOLLOW',
             textColor: Colors.white70,
           ),
-        ),
-//        new Positioned(
-//          top: 26.0,
-//          left: 4.0,
-//          child: new BackButton(color: Colors.white),
-//        ),
+        )
       ],
     );
   }

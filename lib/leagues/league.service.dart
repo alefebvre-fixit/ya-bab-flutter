@@ -15,14 +15,31 @@ class LeagueService {
     return Firestore.instance.collection('groups').snapshots;
   }
 
-  Future<void> upsert(League group) {
-    if (group.id != null) {
+  Future<DocumentReference> create(League league) {
+    return Firestore.instance.collection('groups').add(league.toDocument());
+  }
+
+  Future<League> findOne(String id){
+    return Firestore.instance.collection('groups').document(id).get().then(
+        (document) => new League.fromDocument(document)
+    );
+  }
+
+  Future<void> update(League league) async {
+    Firestore.instance
+        .collection('groups')
+        .document(league.id)
+        .setData(league.toDocument());
+  }
+
+  Future<void> upsert(League league) {
+    if (league.id != null) {
       return Firestore.instance
           .collection('groups')
-          .document(group.id)
-          .setData(group.toDocument());
+          .document(league.id)
+          .setData(league.toDocument());
     } else {
-      return Firestore.instance.collection('groups').add(group.toDocument());
+      return create(league);
     }
   }
 }

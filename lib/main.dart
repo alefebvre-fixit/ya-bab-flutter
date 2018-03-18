@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onSelected: (YaBabAction value) =>
                   Navigator.of(context).push(new MaterialPageRoute<Null>(
                     builder: (BuildContext context) {
-                      return new CreateLeagueWidget();
+                      return new CreateLeagueWidget(null);
                     },
                   )),
               itemBuilder: (BuildContext context) =>
