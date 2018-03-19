@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yabab/users/user.model.dart';
 import 'package:yabab/users/user.page.dart';
 import 'package:yabab/users/user.service.dart';
@@ -29,11 +28,10 @@ class UserList extends StatelessWidget {
 }
 
 class UserListTile extends StatelessWidget {
-  User user;
 
-  UserListTile(User user) {
-    this.user = user;
-  }
+  final User user;
+
+  UserListTile(this.user);
 
   @override
   Widget build(BuildContext context) {

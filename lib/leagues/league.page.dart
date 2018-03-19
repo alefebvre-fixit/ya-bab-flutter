@@ -4,8 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:yabab/leagues/create-league.page.dart';
 import 'package:yabab/leagues/league-follow.button.dart';
 import 'package:yabab/leagues/league.model.dart';
-
-final reference = Firestore.instance.collection('leagues');
+import 'package:yabab/leagues/league.service.dart';
 
 class LeagueWidget extends StatelessWidget {
   final League league;
@@ -24,7 +23,11 @@ class LeagueWidget extends StatelessWidget {
             new Flexible(
               child: new Text(league.name),
             ),
-            new IconButton(icon: new Icon(Icons.favorite), onPressed: () {}),
+            new IconButton(icon: new Icon(Icons.favorite), onPressed: () {
+              LeagueService.instance.findAllFollowers(league.id);
+
+
+            }),
           ]),
         ),
         new Container(
@@ -160,3 +163,30 @@ class PhotoHero extends StatelessWidget {
     );
   }
 }
+
+
+
+
+//class FollowerList extends StatelessWidget {
+//
+//  FollowerList(this.league);
+//
+//  final League league;
+//
+//  @override
+//  Widget build(BuildContext context) {
+//
+//    return new StreamBuilder(
+//      stream: LeagueService.instance.findAllFollowersAsSnapshot(league.id),
+//      builder: (context, snapshot) {
+//        if (!snapshot.hasData) return new Text('Loading...');
+//        return new ListView(
+//          children: snapshot.data.documents.map((document) {
+//            return new Container(
+//                padding: new EdgeInsets.all(20.0), child: new Text('Hello'));
+//          }).toList(),
+//        );
+//      },
+//    );
+//  }
+//}
