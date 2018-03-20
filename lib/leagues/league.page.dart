@@ -5,6 +5,7 @@ import 'package:yabab/leagues/create-league.page.dart';
 import 'package:yabab/leagues/league-follow.button.dart';
 import 'package:yabab/leagues/league.model.dart';
 import 'package:yabab/leagues/league.service.dart';
+import 'package:yabab/users/user.model.dart';
 
 class LeagueWidget extends StatelessWidget {
   final League league;
@@ -33,6 +34,10 @@ class LeagueWidget extends StatelessWidget {
         new Container(
             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
             child: new Text('some tet here')),
+
+        new Expanded(
+            child: new FollowerList(league)
+        )
       ],
     ));
   }
@@ -164,7 +169,63 @@ class PhotoHero extends StatelessWidget {
   }
 }
 
+class FollowerList extends StatefulWidget {
 
+  FollowerList(this.league);
+
+  final League league;
+
+  @override
+  _FollowerList createState() => new _FollowerList(league);
+}
+
+class _FollowerList extends State<FollowerList> {
+
+  _FollowerList(this.league);
+
+  final League league;
+
+  @override
+  Widget build(BuildContext context) {
+
+    return new FutureBuilder(
+      future: LeagueService.instance.findAllFollowers(league.id),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return new Text('loading...');
+          default:
+            if (snapshot.hasError)
+              return new Text('Error: ${snapshot.error}');
+            else
+              return createListView(context, snapshot);
+        }
+      },
+    );
+
+
+  }
+
+
+
+  Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
+    List<User> values = snapshot.data;
+    return new ListView.builder(
+      itemCount: values.length,
+      itemBuilder: (BuildContext context, int index) {
+        return new Column(
+          children: <Widget>[
+            new ListTile(
+              title: new Text(values[index].name),
+            ),
+            new Divider(height: 2.0,),
+          ],
+        );
+      },
+    );
+  }
+}
 
 
 //class FollowerList extends StatelessWidget {
@@ -176,10 +237,9 @@ class PhotoHero extends StatelessWidget {
 //  @override
 //  Widget build(BuildContext context) {
 //
-//    return new StreamBuilder(
-//      stream: LeagueService.instance.findAllFollowersAsSnapshot(league.id),
+//    return new FutureBuilder(
+//      future: LeagueService.instance.findAllFollowers(league.id),
 //      builder: (context, snapshot) {
-//        if (!snapshot.hasData) return new Text('Loading...');
 //        return new ListView(
 //          children: snapshot.data.documents.map((document) {
 //            return new Container(

@@ -106,38 +106,50 @@ class LeagueService {
 //
 //  }
 
-  void findAllFollowers(String leagueId) async {
-    var followerIds$ = new Observable<QuerySnapshot>.fromFuture(Firestore
+  Future<List<User>> findAllFollowers(String leagueId) async {
+    return Firestore
         .instance
-        .collection('groups/' + leagueId + '/followers').getDocuments())
-        .map((querySnapshot) => querySnapshot.documents)
-        .map((documents) { print(documents); return documents; })
-        .map((documents) => documents.map((document) {print(documents); return document["follower"];} ))
-        .map((documents) { print(documents); return documents; })
-
-  ;
-
-
-    followerIds$
-      .map( (ids) => ids.map( (id) => findOneUser(id) ))
-      . flatMap( (users) => new Observable<User>.concat(users))
-
-
-
-
-    .listen((x) => print("Next: $x"),
-  onError: (e, s) => print("Error: $e"),
-  onDone: () => print("Completed"));
-
-
+        .collection('groups/' + leagueId + '/followers').getDocuments()
+        .then((querySnapshot) => querySnapshot.documents)
+        .then((documentSnapshots) => documentSnapshots.map((document) => document['follower']))
+        .then((ids) { print(ids); return ids; })
+        .then( (ids) => ids.map( (id) => findOneUser(id) ))
+        .then((futurUsers) => Future.wait(futurUsers));
   }
 
-  Observable<User> findOneUser(String id) {
-  return new Observable<User>.fromFuture(Firestore.instance
+//  void findAllFollowers2(String leagueId) async {
+//  var followerIds$ = new Observable<QuerySnapshot>.fromFuture(Firestore
+//      .instance
+//      .collection('groups/' + leagueId + '/followers').getDocuments())
+//      .map((querySnapshot) => querySnapshot.documents)
+//      .map((documents) { print(documents); return documents; })
+//      .map((documents) => documents.map((document) {print(documents); return document["follower"];} ))
+//      .map((documents) { print(documents); return documents; })
+//
+//  ;
+//
+//
+//  followerIds$
+//      .map( (ids) => ids.map( (id) => findOneUser(id) ))
+//      .flatMap( (users) => new Observable<User>.concat(users))
+//
+//
+//
+//
+//      .listen((x) => print("Next: $x"),
+//  onError: (e, s) => print("Error: $e"),
+//  onDone: () => print("Completed"));
+//
+//
+//  }
+
+
+  Future<User> findOneUser(String id) {
+  return Firestore.instance
       .collection('users')
       .document(id)
       .get()
-      .then((document) => new User.fromDocument(document)));
+      .then((document) => new User.fromDocument(document));
   }
 
 //  List<User> _asUserList(List<DocumentSnapshot> documents){
