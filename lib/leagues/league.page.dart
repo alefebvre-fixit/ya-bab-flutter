@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'package:yabab/leagues/create-league.page.dart';
 import 'package:yabab/leagues/league-follow.button.dart';
 import 'package:yabab/leagues/league.model.dart';
 import 'package:yabab/leagues/league.service.dart';
 import 'package:yabab/users/user.model.dart';
+import 'package:yabab/users/user.page.dart';
 
 class LeagueWidget extends StatelessWidget {
   final League league;
@@ -24,20 +24,17 @@ class LeagueWidget extends StatelessWidget {
             new Flexible(
               child: new Text(league.name),
             ),
-            new IconButton(icon: new Icon(Icons.favorite), onPressed: () {
-              LeagueService.instance.findAllFollowers(league.id);
-
-
-            }),
+            new IconButton(
+                icon: new Icon(Icons.favorite),
+                onPressed: () {
+                  LeagueService.instance.findAllFollowers(league.id);
+                }),
           ]),
         ),
         new Container(
             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
             child: new Text('some tet here')),
-
-        new Expanded(
-            child: new FollowerList(league)
-        )
+        new Expanded(child: new FollowerList(league))
       ],
     ));
   }
@@ -169,32 +166,17 @@ class PhotoHero extends StatelessWidget {
   }
 }
 
-class FollowerList extends StatefulWidget {
-
+class FollowerList extends StatelessWidget {
   FollowerList(this.league);
 
   final League league;
 
   @override
-  _FollowerList createState() => new _FollowerList(league);
-}
-
-class _FollowerList extends State<FollowerList> {
-
-  _FollowerList(this.league);
-
-  final League league;
-
-  @override
   Widget build(BuildContext context) {
-
     return new FutureBuilder(
       future: LeagueService.instance.findAllFollowers(league.id),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return new Text('loading...');
           default:
             if (snapshot.hasError)
               return new Text('Error: ${snapshot.error}');
@@ -203,23 +185,19 @@ class _FollowerList extends State<FollowerList> {
         }
       },
     );
-
-
   }
-
-
 
   Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
     List<User> values = snapshot.data;
     return new ListView.builder(
-      itemCount: values.length,
+      itemCount: values!= null ? values.length: 0,
       itemBuilder: (BuildContext context, int index) {
         return new Column(
           children: <Widget>[
-            new ListTile(
-              title: new Text(values[index].name),
+            new UserListTile(values[index]),
+            new Divider(
+              height: 2.0,
             ),
-            new Divider(height: 2.0,),
           ],
         );
       },
@@ -227,26 +205,33 @@ class _FollowerList extends State<FollowerList> {
   }
 }
 
+class UserListTile extends StatelessWidget {
+  final User user;
 
-//class FollowerList extends StatelessWidget {
-//
-//  FollowerList(this.league);
-//
-//  final League league;
-//
-//  @override
-//  Widget build(BuildContext context) {
-//
-//    return new FutureBuilder(
-//      future: LeagueService.instance.findAllFollowers(league.id),
-//      builder: (context, snapshot) {
-//        return new ListView(
-//          children: snapshot.data.documents.map((document) {
-//            return new Container(
-//                padding: new EdgeInsets.all(20.0), child: new Text('Hello'));
-//          }).toList(),
-//        );
-//      },
-//    );
-//  }
-//}
+  UserListTile(this.user);
+
+  @override
+  Widget build(BuildContext context) {
+    return new ListTile(
+      onTap: () => _navigateToUserDetails(this.user, context),
+      leading: new Hero(
+        tag: user.id,
+        child: new CircleAvatar(
+          backgroundImage: new NetworkImage(user.avatar),
+        ),
+      ),
+      title: new Text(user.name),
+      subtitle: new Text(user.email),
+    );
+  }
+}
+
+_navigateToUserDetails(User user, BuildContext context) {
+  Navigator.of(context).push(
+    new MaterialPageRoute(
+      builder: (c) {
+        return new UserDetailsPage(user);
+      },
+    ),
+  );
+}
