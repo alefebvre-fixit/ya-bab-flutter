@@ -22,10 +22,6 @@ class MatchWidget extends StatelessWidget {
             new IconButton(icon: new Icon(Icons.favorite), onPressed: () {}),
           ]),
         ),
-        new Container(
-            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-            child: new Text('some tet here')),
-        new Score()
       ],
     ));
   }
@@ -117,24 +113,6 @@ class MatchDetailHeader extends StatelessWidget {
 
     var theme = Theme.of(context);
     var textTheme = theme.textTheme;
-    var followerStyle =
-        textTheme.subhead.copyWith(color: const Color(0xBBFFFFFF));
-
-    var followerInfo = new Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          new Text('90 Following', style: followerStyle),
-          new Text(
-            ' | ',
-            style: followerStyle.copyWith(
-                fontSize: 24.0, fontWeight: FontWeight.normal),
-          ),
-          new Text('100 Followers', style: followerStyle),
-        ],
-      ),
-    );
 
     var locationInfo = new Row(
       children: [
@@ -162,7 +140,10 @@ class MatchDetailHeader extends StatelessWidget {
         ),
         new Padding(
           padding: const EdgeInsets.only(top: 4.0),
-          child: locationInfo,
+          child: new Text(
+            'hello',
+            style: textTheme.headline.copyWith(color: Colors.white),
+          ),
         ),
       ],
     );
@@ -182,12 +163,22 @@ class MatchDetailHeader extends StatelessWidget {
             )
           ],
         ),
-        new Positioned(bottom: 80.0, left: 26.0, child: title),
-        new Container(
-            padding: const EdgeInsets.only(top: 170.0),
-            child: new Score(),
+        new Align(
+          alignment: FractionalOffset.bottomCenter,
+          heightFactor: 1.4,
+          child: new Column(
+            children: [
+              new Container(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: title,
+              ),
+              new Container(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: new Score(),
+              ),
+            ],
+          ),
         ),
-
       ],
     );
   }
