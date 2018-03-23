@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:yabab/match/match.page.dart';
+import 'package:yabab/match/match.model.dart';
 
 class MatchMakingListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MatchMakingList();
+    // Scaffold is a layout for the major Material Components.
+    return new Scaffold(
+      body: new Center(
+        child: new MatchMakingList(),
+      ),
+      floatingActionButton: new FloatingActionButton(
+        tooltip: 'Add', // used by assistive technologies
+        child: new Icon(Icons.add),
+        onPressed: () => _createMatch(context),
+      ),
+    );
   }
 }
 
@@ -26,4 +38,18 @@ class MatchMakingList extends StatelessWidget {
       },
     );
   }
+}
+
+_createMatch(BuildContext context) {
+  _navigateToMatch(new MatchMaking(), context);
+}
+
+_navigateToMatch(MatchMaking match, BuildContext context) {
+  Navigator.of(context).push(
+    new MaterialPageRoute(
+      builder: (c) {
+        return new MatchWidget(match);
+      },
+    ),
+  );
 }

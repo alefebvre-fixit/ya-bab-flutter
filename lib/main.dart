@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart'; // new
 import 'dart:async'; // new
 import 'package:firebase_auth/firebase_auth.dart'; // new
-import 'package:firebase_database/firebase_database.dart'; //new
-import 'package:firebase_database/ui/firebase_animated_list.dart'; //new
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yabab/leagues/create-league.page.dart';
 import 'package:yabab/leagues/league-list.page.dart';
-import 'package:yabab/match/match.dart';
+import 'package:yabab/match/match-list.dart';
 import 'package:yabab/users/user-list.page.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 

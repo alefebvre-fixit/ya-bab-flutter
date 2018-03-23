@@ -1,0 +1,251 @@
+import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+import 'package:yabab/match/match.model.dart';
+
+class MatchWidget extends StatelessWidget {
+  final MatchMaking match;
+
+  MatchWidget(this.match);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        body: new Column(
+      children: <Widget>[
+        new MatchDetailHeader(match),
+        new Container(
+          padding: const EdgeInsets.all(16.0),
+          child: new Row(children: <Widget>[
+            new Flexible(
+              child: new Text('league name'),
+            ),
+            new IconButton(icon: new Icon(Icons.favorite), onPressed: () {}),
+          ]),
+        ),
+        new Container(
+            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+            child: new Text('some tet here')),
+        new Score()
+      ],
+    ));
+  }
+}
+
+class Score extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        new Row(children: [
+          new Container(
+              child: new Row(
+            children: [
+              new Container(
+                  margin: const EdgeInsets.only(left: 26.0),
+                  child: new PlayerAvatar(Colors.blue)),
+              new Container(
+                  margin: const EdgeInsets.only(left: 12.0),
+                  child: new PlayerAvatar(Colors.blue)),
+            ],
+          ))
+        ]),
+        new Expanded(
+            child: new Container(
+          child: new Text(
+            '1' + ':' '2',
+            textAlign: TextAlign.center,
+            style: Theme
+                .of(context)
+                .textTheme
+                .display1
+                .copyWith(color: Colors.grey),
+          ),
+        )),
+        new Container(
+            child: new Row(
+          children: [
+            new Container(
+                margin: const EdgeInsets.only(right: 12.0),
+                child: new PlayerAvatar(Colors.red)),
+            new Container(
+                margin: const EdgeInsets.only(right: 26.0),
+                child: new PlayerAvatar(Colors.red)),
+          ],
+        ))
+      ],
+    );
+  }
+}
+
+class PlayerAvatar extends StatelessWidget {
+  final Color color;
+
+  PlayerAvatar(this.color);
+
+  @override
+  Widget build(BuildContext context) {
+    return new GestureDetector(
+        onTap: () {
+          print('Tap!');
+        },
+        child: new Container(
+            child: new CircleAvatar(
+                child: const Text('?'),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.green),
+            padding: const EdgeInsets.all(3.0),
+            decoration: new BoxDecoration(
+              color: color, // border color
+              shape: BoxShape.circle,
+            )));
+  }
+}
+
+class MatchDetailHeader extends StatelessWidget {
+  static const BACKGROUND_IMAGE = 'assets/images/babyfoot.jpg';
+
+  MatchDetailHeader(this.match);
+
+  final MatchMaking match;
+
+  @override
+  Widget build(BuildContext context) {
+    var photo = new PhotoHero(
+      photo: BACKGROUND_IMAGE,
+    );
+
+    var theme = Theme.of(context);
+    var textTheme = theme.textTheme;
+    var followerStyle =
+        textTheme.subhead.copyWith(color: const Color(0xBBFFFFFF));
+
+    var followerInfo = new Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          new Text('90 Following', style: followerStyle),
+          new Text(
+            ' | ',
+            style: followerStyle.copyWith(
+                fontSize: 24.0, fontWeight: FontWeight.normal),
+          ),
+          new Text('100 Followers', style: followerStyle),
+        ],
+      ),
+    );
+
+    var locationInfo = new Row(
+      children: [
+        new Icon(
+          Icons.place,
+          color: Colors.white,
+          size: 16.0,
+        ),
+        new Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: new Text(
+            'hello',
+            style: textTheme.subhead.copyWith(color: Colors.white),
+          ),
+        ),
+      ],
+    );
+
+    var title = new Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        new Text(
+          'league name',
+          style: textTheme.display1.copyWith(color: Colors.white),
+        ),
+        new Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: locationInfo,
+        ),
+      ],
+    );
+
+    return new Stack(
+      children: [
+        photo,
+        new AppBar(
+          toolbarOpacity: 0.9,
+          bottomOpacity: 0.0,
+          backgroundColor: Colors.green.withAlpha(0),
+          actions: <Widget>[
+            new IconButton(
+              icon: const Icon(Icons.create),
+              tooltip: 'Edit',
+              onPressed: () {},
+            )
+          ],
+        ),
+        new Positioned(bottom: 26.0, left: 26.0, child: title),
+        new Positioned(
+          bottom: 26.0,
+          child: new Align(
+            alignment: FractionalOffset.bottomCenter,
+            heightFactor: 1.4,
+            child: new Column(
+              children: [
+                followerInfo,
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ColoredImage extends StatelessWidget {
+  ColoredImage(this.image, {@required this.color});
+
+  final Image image;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return new ClipPath(
+      child: new DecoratedBox(
+        position: DecorationPosition.foreground,
+        decoration: new BoxDecoration(
+          gradient: new LinearGradient(
+            begin: const Alignment(0.0, -1.0),
+            end: const Alignment(0.0, 0.6),
+            colors: <Color>[color.withAlpha(100), color.withAlpha(64)],
+          ),
+        ),
+        child: image,
+      ),
+    );
+  }
+}
+
+class PhotoHero extends StatelessWidget {
+  const PhotoHero({Key key, this.photo}) : super(key: key);
+
+  final String photo;
+
+  @override
+  Widget build(BuildContext context) {
+    return new SizedBox(
+      child: new Hero(
+          tag: photo,
+          child: new Material(
+            color: Colors.red,
+            child: new InkWell(
+              child: new ColoredImage(
+                new Image.asset(
+                  photo,
+                  fit: BoxFit.cover,
+                ),
+                color: Colors.black,
+              ),
+            ),
+          )),
+    );
+  }
+}
