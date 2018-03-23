@@ -59,7 +59,7 @@ class Score extends StatelessWidget {
                 .of(context)
                 .textTheme
                 .display1
-                .copyWith(color: Colors.grey),
+                .copyWith(color: Colors.white),
           ),
         )),
         new Container(
@@ -154,7 +154,7 @@ class MatchDetailHeader extends StatelessWidget {
     );
 
     var title = new Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         new Text(
           'league name',
@@ -182,19 +182,12 @@ class MatchDetailHeader extends StatelessWidget {
             )
           ],
         ),
-        new Positioned(bottom: 26.0, left: 26.0, child: title),
-        new Positioned(
-          bottom: 26.0,
-          child: new Align(
-            alignment: FractionalOffset.bottomCenter,
-            heightFactor: 1.4,
-            child: new Column(
-              children: [
-                followerInfo,
-              ],
-            ),
-          ),
+        new Positioned(bottom: 80.0, left: 26.0, child: title),
+        new Container(
+            padding: const EdgeInsets.only(top: 170.0),
+            child: new Score(),
         ),
+
       ],
     );
   }
