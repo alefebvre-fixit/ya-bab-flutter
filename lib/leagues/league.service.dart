@@ -4,11 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:yabab/leagues/league.model.dart';
 import 'package:yabab/users/user.model.dart';
-import 'package:yabab/users/user.service.dart';
-import 'package:rxdart/rxdart.dart';
 
 class LeagueService {
-  LeagueService._() {}
+  LeagueService._();
 
   static LeagueService _instance = new LeagueService._();
 
@@ -56,7 +54,7 @@ class LeagueService {
         .snapshots
         .first
         .then((query) {
-      return !query.documents.isEmpty;
+      return query.documents.isNotEmpty;
     });
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:yabab/match/match.model.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class MatchWidget extends StatelessWidget {
   final MatchMaking match;
@@ -22,6 +23,14 @@ class MatchWidget extends StatelessWidget {
             new IconButton(icon: new Icon(Icons.favorite), onPressed: () {}),
           ]),
         ),
+
+
+        new NumberPicker.integer(
+            initialValue: 0,
+            minValue: 0,
+            maxValue: 100,
+            onChanged: (newValue) {},)
+       // new Text("Current number: $_currentValue"),
       ],
     ));
   }
@@ -114,23 +123,6 @@ class MatchDetailHeader extends StatelessWidget {
     var theme = Theme.of(context);
     var textTheme = theme.textTheme;
 
-    var locationInfo = new Row(
-      children: [
-        new Icon(
-          Icons.place,
-          color: Colors.white,
-          size: 16.0,
-        ),
-        new Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: new Text(
-            'hello',
-            style: textTheme.subhead.copyWith(color: Colors.white),
-          ),
-        ),
-      ],
-    );
-
     var title = new Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -199,7 +191,7 @@ class ColoredImage extends StatelessWidget {
           gradient: new LinearGradient(
             begin: const Alignment(0.0, -1.0),
             end: const Alignment(0.0, 0.6),
-            colors: <Color>[color.withAlpha(100), color.withAlpha(64)],
+            colors: <Color>[color.withAlpha(198), color.withAlpha(210)],
           ),
         ),
         child: image,
@@ -226,7 +218,7 @@ class PhotoHero extends StatelessWidget {
                   photo,
                   fit: BoxFit.cover,
                 ),
-                color: Colors.black,
+                color: Colors.green,
               ),
             ),
           )),

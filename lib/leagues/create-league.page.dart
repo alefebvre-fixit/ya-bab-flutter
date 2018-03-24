@@ -5,11 +5,9 @@ import 'package:yabab/leagues/league.page.dart';
 import 'package:yabab/leagues/league.service.dart';
 
 class CreateLeagueWidget extends StatefulWidget {
-  League league;
+  final League league;
 
-  CreateLeagueWidget(League league) {
-    this.league = league;
-  }
+  CreateLeagueWidget(this.league);
 
   @override
   _LeagueFormWidgetState createState() => new _LeagueFormWidgetState(league);

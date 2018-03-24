@@ -6,7 +6,7 @@ import 'package:yabab/users/user.model.dart';
 
 
 class UserService {
-  UserService._() {}
+  UserService._();
 
   static UserService _instance = new UserService._();
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:yabab/shared/diagonal-image.dart';
 import 'package:yabab/users/user.model.dart';
 

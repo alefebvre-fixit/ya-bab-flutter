@@ -22,11 +22,12 @@ class LeagueList extends StatelessWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return new Text('Loading...');
         return new ListView(
-          children: snapshot.data.documents.map((document) {
-            return new Container(
-                padding: new EdgeInsets.all(20.0),
-                child: new LeagueCard(new League.fromDocument(document)));
-          }).toList(),
+//          children: snapshot.data.documents.map((document) {
+//            return new Container(
+//                padding: new EdgeInsets.all(20.0),
+//                child: new LeagueCard(new League.fromDocument(document)));
+//          }).toList(),
+          children: [],
         );
       },
     );
@@ -80,11 +81,9 @@ class LeagueCard extends StatelessWidget {
 }
 
 class LeagueListTile extends StatelessWidget {
-  League league;
+  final League league;
 
-  LeagueListTile(League league) {
-    this.league = league;
-  }
+  LeagueListTile(this.league);
 
   // This widget is the root of your application.
   @override
