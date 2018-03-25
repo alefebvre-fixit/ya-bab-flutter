@@ -14,12 +14,12 @@ class UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StreamBuilder(
-      stream: UserService.instance.findAllAsSnapshot(),
-      builder: (context, snapshot) {
+      stream: UserService.instance.findAllUsers(),
+      builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
         if (!snapshot.hasData) return new Text('Loading...');
         return new ListView(
-          children: snapshot.data.documents.map((document) {
-            return new UserListTile(new User.fromDocument(document));
+          children: snapshot.data.map((user) {
+            return new UserListTile(user);
           }).toList(),
         );
       },
@@ -49,7 +49,7 @@ class UserListTile extends StatelessWidget {
   }
 }
 
-_navigateToUserDetails(User user, BuildContext context) {
+void _navigateToUserDetails(User user, BuildContext context) {
   Navigator.of(context).push(
     new MaterialPageRoute(
       builder: (c) {

@@ -18,13 +18,38 @@ class MatchMaking {
 
   factory MatchMaking.fromDocument(DocumentSnapshot json) {
     return new MatchMaking(
-      id: json['id'],
-      groupId: json['groupId'],
-      ownerId: json['ownerId'],
-      date: json['date'],
-      players: json['players'],
-      games: json['games'],
+      id: json['id'] as String,
+      groupId: json['groupId']  as String,
+      ownerId: json['ownerId'] as String,
+      date: json['date'] as String,
+      players: json['players'] as int,
+      games: json['games'] as int,
     );
+  }
+
+  Map<String, dynamic> toDocument() {
+    var result = new Map<String, dynamic>();
+
+    result.putIfAbsent("groupId", () {
+      return this.groupId;
+    });
+    result.putIfAbsent("ownerId", () {
+      return this.ownerId;
+    });
+
+    result.putIfAbsent("date", () {
+      return this.date;
+    });
+
+    result.putIfAbsent("players", () {
+      return this.players;
+    });
+
+    result.putIfAbsent("games", () {
+      return this.games;
+    });
+
+    return result;
   }
 }
 
@@ -47,12 +72,12 @@ class Match {
 
   factory Match.fromDocument(DocumentSnapshot json) {
     return new Match(
-      id: json['id'],
-      groupId: json['groupId'],
-      ownerId: json['ownerId'],
-      date: json['date'],
-      players: json['players'],
-      games: json['games'],
+      id: json['id'] as String,
+      groupId: json['groupId'] as String,
+      ownerId: json['ownerId'] as String,
+      date: json['date'] as String,
+      players: json['players'] as int,
+      games: json['games'] as int,
     );
   }
 }

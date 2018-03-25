@@ -18,16 +18,16 @@ class LeagueList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StreamBuilder(
-      stream: LeagueService.instance.findAllAsSnapshot(),
-      builder: (context, snapshot) {
+      stream: LeagueService.instance.findAll(),
+      builder: (BuildContext context, AsyncSnapshot<List<League>> snapshot) {
         if (!snapshot.hasData) return new Text('Loading...');
         return new ListView(
-//          children: snapshot.data.documents.map((document) {
-//            return new Container(
-//                padding: new EdgeInsets.all(20.0),
-//                child: new LeagueCard(new League.fromDocument(document)));
-//          }).toList(),
-          children: [],
+          children: snapshot.data.map((league) {
+            return new Container(
+                padding: new EdgeInsets.all(20.0),
+                child: new LeagueCard(league),
+            );
+          }).toList(),
         );
       },
     );

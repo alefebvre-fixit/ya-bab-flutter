@@ -35,12 +35,5 @@ class UserService {
     return documents.map((document) => new User.fromDocument(document)).toList();
   }
 
-//  List<User> _fromIds(List<String> ids){
-//    return ids.map((id) => findOne(id)).toList();
-//  }
-
-
-
-
 
 }

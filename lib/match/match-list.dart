@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yabab/match/match.page.dart';
 import 'package:yabab/match/match.model.dart';
+import 'package:yabab/match/match.service.dart';
 
 class MatchMakingListPage extends StatelessWidget {
   @override
@@ -23,14 +23,13 @@ class MatchMakingListPage extends StatelessWidget {
 class MatchMakingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //return new Text('displayName');
-
     return new StreamBuilder(
-      stream: Firestore.instance.collection('match-makings').snapshots,
-      builder: (context, snapshot) {
+      stream: MatchService.instance.findAll(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<MatchMaking>> snapshot) {
         if (!snapshot.hasData) return new Text('Loading...');
         return new ListView(
-          children: snapshot.data.documents.map((document) {
+          children: snapshot.data.map((match) {
             return new Container(
                 padding: new EdgeInsets.all(20.0), child: new Text('Hello'));
           }).toList(),
@@ -40,11 +39,11 @@ class MatchMakingList extends StatelessWidget {
   }
 }
 
-_createMatch(BuildContext context) {
+void _createMatch(BuildContext context) {
   _navigateToMatch(new MatchMaking(), context);
 }
 
-_navigateToMatch(MatchMaking match, BuildContext context) {
+void _navigateToMatch(MatchMaking match, BuildContext context) {
   Navigator.of(context).push(
     new MaterialPageRoute(
       builder: (c) {

@@ -226,7 +226,7 @@ class UserListTile extends StatelessWidget {
   }
 }
 
-_navigateToUserDetails(User user, BuildContext context) {
+void _navigateToUserDetails(User user, BuildContext context) {
   Navigator.of(context).push(
     new MaterialPageRoute(
       builder: (c) {

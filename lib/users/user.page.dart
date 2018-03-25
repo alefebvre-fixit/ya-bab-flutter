@@ -55,7 +55,7 @@ class UserDetailBody extends StatelessWidget {
 
   final User user;
 
-  _createCircleBadge(IconData iconData, Color color) {
+  Widget _createCircleBadge(IconData iconData, Color color) {
     return new Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: new CircleAvatar(
@@ -138,7 +138,7 @@ class UserDetailHeader extends StatelessWidget {
 
   final User user;
 
-  _createPillButton(
+  Widget _createPillButton(
       String text, {
         Color backgroundColor = Colors.transparent,
         Color textColor = Colors.white70,

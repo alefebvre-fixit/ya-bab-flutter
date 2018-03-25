@@ -17,6 +17,14 @@ class LeagueService {
     return Firestore.instance.collection('groups').snapshots;
   }
 
+  Stream<List<League>> findAll(){
+    return Firestore.instance.collection('groups').snapshots.map((query) => query.documents).map( (documents) => _fromDocuments(documents));
+  }
+
+  List<League> _fromDocuments(List<DocumentSnapshot> documents){
+    return documents.map((document) => new League.fromDocument(document)).toList();
+  }
+
   Future<DocumentReference> create(League league) {
     return Firestore.instance.collection('groups').add(league.toDocument());
   }
@@ -88,59 +96,17 @@ class LeagueService {
         .first;
   }
 
-//  Future<List<User>> findAllFollowers(String leagueId) async {
-//
-//      var followerIds$ = new Observable<QuerySnapshot>.fromFuture(Firestore.instance
-//          .collection('groups/' + leagueId + '/followers').snapshots.first);
-//
-//      return new Observable<QuerySnapshot>.fromFuture(Firestore.instance
-//      .collection('groups/' + leagueId + '/followers')
-//      .snapshots
-//      .first)
-//      .map((querySnapshot) => querySnapshot.documents)
-//      .map( (documents) => documents.map( (document) => UserService.instance.findOne(document['follower'])))
-//      .map( )
-//  ;
-//
-//  }
 
   Future<List<User>> findAllFollowers(String leagueId) async {
     return Firestore
         .instance
         .collection('groups/' + leagueId + '/followers').getDocuments()
         .then((querySnapshot) => querySnapshot.documents)
-        .then((documentSnapshots) => documentSnapshots.map((document) => document['follower']))
+        .then((documentSnapshots) => documentSnapshots.map((document) => document['follower'] as String))
         .then((ids) { print(ids); return ids; })
         .then( (ids) => ids.map( (id) => findOneUser(id) ))
         .then((futurUsers) => Future.wait(futurUsers));
   }
-
-//  void findAllFollowers2(String leagueId) async {
-//  var followerIds$ = new Observable<QuerySnapshot>.fromFuture(Firestore
-//      .instance
-//      .collection('groups/' + leagueId + '/followers').getDocuments())
-//      .map((querySnapshot) => querySnapshot.documents)
-//      .map((documents) { print(documents); return documents; })
-//      .map((documents) => documents.map((document) {print(documents); return document["follower"];} ))
-//      .map((documents) { print(documents); return documents; })
-//
-//  ;
-//
-//
-//  followerIds$
-//      .map( (ids) => ids.map( (id) => findOneUser(id) ))
-//      .flatMap( (users) => new Observable<User>.concat(users))
-//
-//
-//
-//
-//      .listen((x) => print("Next: $x"),
-//  onError: (e, s) => print("Error: $e"),
-//  onDone: () => print("Completed"));
-//
-//
-//  }
-
 
   Future<User> findOneUser(String id) {
   return Firestore.instance
@@ -150,13 +116,5 @@ class LeagueService {
       .then((document) => new User.fromDocument(document));
   }
 
-//  List<User> _asUserList(List<DocumentSnapshot> documents){
-//
-//  documents.map((document).)
-//
-//  }
 
-//  Stream<List<User>> findAllUsers(){
-//    return Firestore.instance.collection('users').snapshots.map((query) => query.documents).map( (documents) => _fromDocuments(documents.));
-//  }
 }

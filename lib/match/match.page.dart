@@ -25,16 +25,58 @@ class MatchWidget extends StatelessWidget {
         ),
 
 
-        new NumberPicker.integer(
-            initialValue: 0,
-            minValue: 0,
-            maxValue: 100,
-            onChanged: (newValue) {},)
+        new DetailedScore(),
        // new Text("Current number: $_currentValue"),
       ],
     ));
   }
 }
+
+
+class DetailedScore extends StatefulWidget {
+  // This class is the configuration for the state. It holds the
+  // values (in this nothing) provided by the parent and used by the build
+  // method of the State. Fields in a Widget subclass are always marked "final".
+
+  @override
+  _DetailedScoreState createState() => new _DetailedScoreState();
+}
+
+
+
+class _DetailedScoreState extends State<DetailedScore> {
+  double _currentPrice = 1.0;
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      child: new NumberPickerDialog.decimal(
+          minValue: 1,
+          maxValue: 10,
+          title: new Text("Pick a new price"),
+          initialDoubleValue: _currentPrice),
+    ).then((value) {
+      if (value != null) {
+        setState(() => _currentPrice = value);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+        child: new Column(
+            children: <Widget>[
+                  new Center(
+                  child: new Text("Current price: $_currentPrice \$"),
+              ),
+              new RaisedButton(child: new Text('Hello'),onPressed: _showDialog)
+            ]
+        ),
+    );
+  }
+}
+
 
 class Score extends StatelessWidget {
   @override
@@ -175,6 +217,8 @@ class MatchDetailHeader extends StatelessWidget {
     );
   }
 }
+
+
 
 class ColoredImage extends StatelessWidget {
   ColoredImage(this.image, {@required this.color});

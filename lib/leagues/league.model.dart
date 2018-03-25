@@ -11,9 +11,9 @@ class League {
   factory League.fromDocument(DocumentSnapshot document) {
     return new League(
       id: document.documentID,
-      name: document['name'],
+      name: document['name'] as String,
       location:
-          document['location'] != null ? document['location'] : 'Somewhere',
+          document['location'] != null ? document['location'] as String: 'Somewhere',
     );
   }
 

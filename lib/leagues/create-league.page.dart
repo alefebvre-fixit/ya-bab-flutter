@@ -61,7 +61,7 @@ class _LeagueFormWidgetState extends State<CreateLeagueWidget> {
     }
   }
 
-  _navigateToLeague(League league) {
+  void _navigateToLeague(League league) {
     Navigator
         .of(context).pop();
     Navigator

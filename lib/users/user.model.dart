@@ -11,16 +11,16 @@ class User {
 
   factory User.fromDocument(DocumentSnapshot document) {
     return new User(
-        id: document['uid'],
-        name: document['displayName'],
-        email: document['email'],
+        id: document['uid'] as String,
+        name: document['displayName'] as String,
+        email: document['email'] as String,
         avatar: _getAvatarURL(document),
         location: 'San Francisco');
   }
 
   static String _getAvatarURL(DocumentSnapshot document) {
-    var name = document['displayName'];
-    var photoURL = document['photoURL'];
+    var name = document['displayName'] as String;
+    var photoURL = document['photoURL'] as String;
 
     if (photoURL != null && photoURL != '') {
       return photoURL;
