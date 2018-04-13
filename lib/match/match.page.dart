@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:yabab/match/game.dialog.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:yabab/match/match.service.dart';
 
 class MatchWidget extends StatelessWidget {
   final MatchMaking match;
@@ -23,10 +25,19 @@ class MatchWidget extends StatelessWidget {
             new IconButton(icon: new Icon(Icons.favorite), onPressed: () {}),
           ]),
         ),
-
-
+        new ExpansionTile(
+            title: const Text('Best of 3'),
+            backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
+            children: const <Widget>[
+              const ListTile(title: const Text('Best of 1')),
+              const ListTile(title: const Text('Best of 3')),
+              const ListTile(title: const Text('Best of 5')),
+            ]
+        ),
         new DetailedScore(),
-       // new Text("Current number: $_currentValue"),
+        new Expanded(child: new GameList(match))
+
+        // new Text("Current number: $_currentValue"),
       ],
     ));
   }
@@ -70,7 +81,16 @@ class _DetailedScoreState extends State<DetailedScore> {
                   new Center(
                   child: new Text("Current price: $_currentPrice \$"),
               ),
-              new RaisedButton(child: new Text('Hello'),onPressed: _showDialog)
+              new RaisedButton(child: new Text('Hello'),onPressed: _showDialog),
+              new RaisedButton(
+                  child: const Text('FULLSCREEN'),
+                  onPressed: () {
+                    Navigator.push(context, new MaterialPageRoute<DismissDialogAction>(
+                      builder: (BuildContext context) => new FullScreenDialogDemo(),
+                      fullscreenDialog: true,
+                    ));
+                  }
+              ),
             ]
         ),
     );
@@ -269,3 +289,75 @@ class PhotoHero extends StatelessWidget {
     );
   }
 }
+
+
+
+
+class GameList extends StatelessWidget {
+
+  GameList(this.match);
+
+  final MatchMaking match;
+
+  @override
+  Widget build(BuildContext context) {
+    return new FutureBuilder(
+      future: MatchService.instance.instanciate(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        switch (snapshot.connectionState) {
+          default:
+            if (snapshot.hasError)
+              return new Text('Error: ${snapshot.error}');
+            else
+              return createListView(context, snapshot);
+        }
+      },
+    );
+  }
+
+  Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
+    List<Game> values = snapshot.data;
+    return new ListView.builder(
+      itemCount: values!= null ? values.length: 0,
+      itemBuilder: (BuildContext context, int index) {
+        return new Column(
+          children: <Widget>[
+            new GameListTile(values[index]),
+            new Divider(
+              height: 2.0,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class GameListTile extends StatelessWidget {
+  final Game game;
+
+  GameListTile(this.game);
+
+  @override
+  Widget build(BuildContext context) {
+    return new ListTile(
+      onTap: () => {},
+      leading: new Hero(
+        tag: game.id,
+        child: new CircleAvatar(
+          child: new Text(game.id),
+        ),
+      ),
+      title: new Text(
+        '1' + ':' '2',
+        textAlign: TextAlign.center,
+        style: Theme
+            .of(context)
+            .textTheme
+            .headline
+            .copyWith(color: Colors.black),
+      ),
+    );
+  }
+}
+

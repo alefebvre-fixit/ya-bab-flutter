@@ -60,4 +60,14 @@ class MatchService {
       return create(match);
     }
   }
+
+  Future<List<Game>> instanciate() async {
+    List<Game> result = new List();
+
+    result.add(new Game(id: "1", scoreTeamA: 0, scoreTeamB: 0));
+    result.add(new Game(id: "2", scoreTeamA: 0, scoreTeamB: 0));
+    result.add(new Game(id: "3", scoreTeamA: 0, scoreTeamB: 0));
+
+    return result;
+  }
 }

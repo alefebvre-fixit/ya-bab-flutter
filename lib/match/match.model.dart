@@ -54,30 +54,17 @@ class MatchMaking {
 }
 
 
-class Match {
+class Game {
+
   final String id;
-  final String groupId;
-  final String ownerId;
-  final String date;
-  final int players;
-  final int games;
+  final int scoreTeamA;
+  final int scoreTeamB;
 
-  Match(
+  Game(
       {this.id,
-        this.groupId,
-        this.ownerId,
-        this.date,
-        this.players,
-        this.games});
+        this.scoreTeamA,
+        this.scoreTeamB});
 
-  factory Match.fromDocument(DocumentSnapshot json) {
-    return new Match(
-      id: json['id'] as String,
-      groupId: json['groupId'] as String,
-      ownerId: json['ownerId'] as String,
-      date: json['date'] as String,
-      players: json['players'] as int,
-      games: json['games'] as int,
-    );
-  }
+
 }
+
