@@ -6,6 +6,7 @@ import 'package:yabab/leagues/league.model.dart';
 import 'package:yabab/leagues/league.service.dart';
 import 'package:yabab/users/user.model.dart';
 import 'package:yabab/users/user.page.dart';
+import 'package:yabab/users/user.tile.dart';
 
 class LeagueWidget extends StatelessWidget {
   final League league;
@@ -194,7 +195,7 @@ class FollowerList extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return new Column(
           children: <Widget>[
-            new UserListTile(values[index]),
+            new UserListTile(values[index], () => _navigateToUserDetails(values[index], context)),
             new Divider(
               height: 2.0,
             ),
@@ -205,26 +206,7 @@ class FollowerList extends StatelessWidget {
   }
 }
 
-class UserListTile extends StatelessWidget {
-  final User user;
 
-  UserListTile(this.user);
-
-  @override
-  Widget build(BuildContext context) {
-    return new ListTile(
-      onTap: () => _navigateToUserDetails(this.user, context),
-      leading: new Hero(
-        tag: user.id,
-        child: new CircleAvatar(
-          backgroundImage: new NetworkImage(user.avatar),
-        ),
-      ),
-      title: new Text(user.name),
-      subtitle: new Text(user.email),
-    );
-  }
-}
 
 void _navigateToUserDetails(User user, BuildContext context) {
   Navigator.of(context).push(

@@ -4,6 +4,7 @@ import 'package:yabab/match/game.dialog.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:yabab/match/match.service.dart';
+import 'package:yabab/match/player.dialog.dart';
 
 class MatchWidget extends StatelessWidget {
   final MatchMaking match;
@@ -154,7 +155,10 @@ class PlayerAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return new GestureDetector(
         onTap: () {
-          print('Tap!');
+          Navigator.push(context, new MaterialPageRoute<PlayerDialogAction>(
+            builder: (BuildContext context) => new PlayerDialog(),
+            fullscreenDialog: true,
+          ));
         },
         child: new Container(
             child: new CircleAvatar(

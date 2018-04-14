@@ -1,15 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+import 'package:yabab/match/match.model.dart';
 import 'package:yabab/users/user.model.dart';
 import 'package:yabab/users/user.page.dart';
 import 'package:yabab/users/user.service.dart';
 import 'package:yabab/users/user.tile.dart';
 
-class UserListPage extends StatelessWidget {
+enum PlayerDialogAction {
+  cancel,
+  discard,
+  save,
+}
+
+class PlayerDialog extends StatefulWidget {
+
+  @override
+  PlayerDialogState createState() => new PlayerDialogState();
+
+}
+
+class PlayerDialogState extends State<PlayerDialog> {
+
   @override
   Widget build(BuildContext context) {
-    return new UserList();
+    return new Scaffold(
+        appBar: new AppBar(title: const Text('Player Selector'), actions: <Widget>[
+        ]),
+        body: new UserList());
   }
 }
+
 
 class UserList extends StatelessWidget {
   @override
@@ -37,3 +57,10 @@ void _navigateToUserDetails(User user, BuildContext context) {
     ),
   );
 }
+
+
+
+
+
+
+

@@ -8,13 +8,17 @@ class MatchMaking {
   final int players;
   final int games;
 
+  final int bestOf;
+
   MatchMaking(
       {this.id,
         this.groupId,
         this.ownerId,
         this.date,
         this.players,
-        this.games});
+        this.games,
+        this.bestOf
+      });
 
   factory MatchMaking.fromDocument(DocumentSnapshot json) {
     return new MatchMaking(
@@ -47,6 +51,10 @@ class MatchMaking {
 
     result.putIfAbsent("games", () {
       return this.games;
+    });
+
+    result.putIfAbsent("bestOf", () {
+      return this.bestOf;
     });
 
     return result;
