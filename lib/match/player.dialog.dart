@@ -40,7 +40,7 @@ class UserList extends StatelessWidget {
         if (!snapshot.hasData) return new Text('Loading...');
         return new ListView(
           children: snapshot.data.map((user) {
-            return new UserListTile(user, () => _navigateToUserDetails(user, context));
+            return new UserListTile(user, () => _selectUser(user, context));
           }).toList(),
         );
       },
@@ -48,14 +48,8 @@ class UserList extends StatelessWidget {
   }
 }
 
-void _navigateToUserDetails(User user, BuildContext context) {
-  Navigator.of(context).push(
-    new MaterialPageRoute(
-      builder: (c) {
-        return new UserDetailsPage(user);
-      },
-    ),
-  );
+void _selectUser(User user, BuildContext context) {
+  Navigator.pop(context, user);
 }
 
 

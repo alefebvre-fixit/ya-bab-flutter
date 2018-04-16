@@ -5,6 +5,7 @@ import 'package:yabab/match/match.model.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:yabab/match/match.service.dart';
 import 'package:yabab/match/player.dialog.dart';
+import 'package:yabab/users/user.model.dart';
 
 class MatchWidget extends StatelessWidget {
   final MatchMaking match;
@@ -17,15 +18,6 @@ class MatchWidget extends StatelessWidget {
         body: new Column(
       children: <Widget>[
         new MatchDetailHeader(match),
-        new Container(
-          padding: const EdgeInsets.all(16.0),
-          child: new Row(children: <Widget>[
-            new Flexible(
-              child: new Text('league name'),
-            ),
-            new IconButton(icon: new Icon(Icons.favorite), onPressed: () {}),
-          ]),
-        ),
         new ExpansionTile(
             title: const Text('Best of 3'),
             backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
@@ -33,9 +25,8 @@ class MatchWidget extends StatelessWidget {
               const ListTile(title: const Text('Best of 1')),
               const ListTile(title: const Text('Best of 3')),
               const ListTile(title: const Text('Best of 5')),
-            ]
-        ),
-        new DetailedScore(),
+            ]),
+        //new DetailedScore(),
         new Expanded(child: new GameList(match))
 
         // new Text("Current number: $_currentValue"),
@@ -43,61 +34,6 @@ class MatchWidget extends StatelessWidget {
     ));
   }
 }
-
-
-class DetailedScore extends StatefulWidget {
-  // This class is the configuration for the state. It holds the
-  // values (in this nothing) provided by the parent and used by the build
-  // method of the State. Fields in a Widget subclass are always marked "final".
-
-  @override
-  _DetailedScoreState createState() => new _DetailedScoreState();
-}
-
-
-
-class _DetailedScoreState extends State<DetailedScore> {
-  double _currentPrice = 1.0;
-
-  void _showDialog() {
-    showDialog(
-      context: context,
-      child: new NumberPickerDialog.decimal(
-          minValue: 1,
-          maxValue: 10,
-          title: new Text("Pick a new price"),
-          initialDoubleValue: _currentPrice),
-    ).then((value) {
-      if (value != null) {
-        setState(() => _currentPrice = value);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-        child: new Column(
-            children: <Widget>[
-                  new Center(
-                  child: new Text("Current price: $_currentPrice \$"),
-              ),
-              new RaisedButton(child: new Text('Hello'),onPressed: _showDialog),
-              new RaisedButton(
-                  child: const Text('FULLSCREEN'),
-                  onPressed: () {
-                    Navigator.push(context, new MaterialPageRoute<DismissDialogAction>(
-                      builder: (BuildContext context) => new FullScreenDialogDemo(),
-                      fullscreenDialog: true,
-                    ));
-                  }
-              ),
-            ]
-        ),
-    );
-  }
-}
-
 
 class Score extends StatelessWidget {
   @override
@@ -146,25 +82,62 @@ class Score extends StatelessWidget {
   }
 }
 
-class PlayerAvatar extends StatelessWidget {
+class PlayerAvatar extends StatefulWidget {
   final Color color;
 
   PlayerAvatar(this.color);
 
   @override
+  _PlayerAvatarState createState() => new _PlayerAvatarState(this.color);
+}
+
+class _PlayerAvatarState extends State<PlayerAvatar> {
+  final Color color;
+  User user;
+
+  _PlayerAvatarState(this.color);
+
+  void _handleUserChanged(User newValue) {
+    setState(() {
+      user = newValue;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    User u;
+
+    var hero;
+    if (user != null) {
+      hero = new Hero(
+        tag: user.id,
+        child: new CircleAvatar(
+          backgroundImage: new NetworkImage(user.avatar),
+        ),
+      );
+    } else {
+      hero = new CircleAvatar(
+          child: const Text('?'),
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.green,
+      );
+    }
+
     return new GestureDetector(
         onTap: () {
-          Navigator.push(context, new MaterialPageRoute<PlayerDialogAction>(
-            builder: (BuildContext context) => new PlayerDialog(),
-            fullscreenDialog: true,
-          ));
+          Navigator
+              .push(
+                  context,
+                  new MaterialPageRoute<User>(
+                    builder: (BuildContext context) => new PlayerDialog(),
+                    fullscreenDialog: true,
+                  ))
+              .then((user) {
+            _handleUserChanged(user);
+          });
         },
         child: new Container(
-            child: new CircleAvatar(
-                child: const Text('?'),
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.green),
+            child: hero,
             padding: const EdgeInsets.all(3.0),
             decoration: new BoxDecoration(
               color: color, // border color
@@ -242,8 +215,6 @@ class MatchDetailHeader extends StatelessWidget {
   }
 }
 
-
-
 class ColoredImage extends StatelessWidget {
   ColoredImage(this.image, {@required this.color});
 
@@ -294,11 +265,7 @@ class PhotoHero extends StatelessWidget {
   }
 }
 
-
-
-
 class GameList extends StatelessWidget {
-
   GameList(this.match);
 
   final MatchMaking match;
@@ -322,7 +289,7 @@ class GameList extends StatelessWidget {
   Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
     List<Game> values = snapshot.data;
     return new ListView.builder(
-      itemCount: values!= null ? values.length: 0,
+      itemCount: values != null ? values.length : 0,
       itemBuilder: (BuildContext context, int index) {
         return new Column(
           children: <Widget>[
@@ -355,13 +322,9 @@ class GameListTile extends StatelessWidget {
       title: new Text(
         '1' + ':' '2',
         textAlign: TextAlign.center,
-        style: Theme
-            .of(context)
-            .textTheme
-            .headline
-            .copyWith(color: Colors.black),
+        style:
+            Theme.of(context).textTheme.headline.copyWith(color: Colors.black),
       ),
     );
   }
 }
-
