@@ -61,7 +61,13 @@ class MatchService {
     }
   }
 
-  Future<List<Game>> instanciate() async {
+  Future<MatchMaking> instantiateMatch() async {
+    MatchMaking result = new MatchMaking();
+
+    return result;
+  }
+
+  Future<List<Game>> instantiateGames() async {
     List<Game> result = new List();
 
     result.add(new Game(id: "1", scoreTeamA: 0, scoreTeamB: 0));

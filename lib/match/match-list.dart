@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:yabab/match/match.page.dart';
 import 'package:yabab/match/match.model.dart';
@@ -39,8 +41,10 @@ class MatchMakingList extends StatelessWidget {
   }
 }
 
-void _createMatch(BuildContext context) {
-  _navigateToMatch(new MatchMaking(), context);
+Future _createMatch(BuildContext context) async {
+  MatchMaking match = await MatchService.instance.instantiateMatch();
+
+  _navigateToMatch(match , context);
 }
 
 void _navigateToMatch(MatchMaking match, BuildContext context) {

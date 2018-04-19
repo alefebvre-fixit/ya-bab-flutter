@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:yabab/match/game.dialog.dart';
 import 'package:yabab/match/match.model.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:yabab/match/match.service.dart';
 import 'package:yabab/match/player.dialog.dart';
 import 'package:yabab/users/user.model.dart';
@@ -35,7 +33,21 @@ class MatchWidget extends StatelessWidget {
   }
 }
 
-class Score extends StatelessWidget {
+class Score extends StatefulWidget {
+  final MatchMaking match;
+
+  Score(this.match);
+
+  @override
+  _ScoreState createState() => new _ScoreState(this.match);
+}
+
+class _ScoreState extends State<Score> {
+  final MatchMaking match;
+
+  _ScoreState(this.match);
+
+
   @override
   Widget build(BuildContext context) {
     return new Row(
@@ -47,11 +59,18 @@ class Score extends StatelessWidget {
             children: [
               new Container(
                   margin: const EdgeInsets.only(left: 26.0),
-                  child: new PlayerAvatar(Colors.blue)),
+                  child: new PlayerAvatar(match, match.team1, match.team1.player1, (user){
+                    setState(() {
+                      this.match.team1.player1 = user;
+                    });
+                  })),
               new Container(
                   margin: const EdgeInsets.only(left: 12.0),
-                  child: new PlayerAvatar(Colors.blue)),
-            ],
+                  child: new PlayerAvatar(match, match.team1, match.team1.player2, (user){
+                    setState(() {
+                      this.match.team1.player2 = user;
+                    });
+                  })),            ],
           ))
         ]),
         new Expanded(
@@ -71,37 +90,32 @@ class Score extends StatelessWidget {
           children: [
             new Container(
                 margin: const EdgeInsets.only(right: 12.0),
-                child: new PlayerAvatar(Colors.red)),
-            new Container(
+                child: new PlayerAvatar(match, match.team2, match.team2.player1, (user){
+                  setState(() {
+                    this.match.team2.player1 = user;
+                  });
+                })),            new Container(
                 margin: const EdgeInsets.only(right: 26.0),
-                child: new PlayerAvatar(Colors.red)),
-          ],
+                child: new PlayerAvatar(match, match.team2, match.team2.player2, (user){
+                  setState(() {
+                    this.match.team2.player2 = user;
+                  });
+                })),          ],
         ))
       ],
     );
   }
 }
 
-class PlayerAvatar extends StatefulWidget {
-  final Color color;
+class PlayerAvatar extends StatelessWidget {
 
-  PlayerAvatar(this.color);
+  final MatchMaking match;
+  final Team team;
+  final User user;
 
-  @override
-  _PlayerAvatarState createState() => new _PlayerAvatarState(this.color);
-}
+  final ValueChanged<User> onChanged;
 
-class _PlayerAvatarState extends State<PlayerAvatar> {
-  final Color color;
-  User user;
-
-  _PlayerAvatarState(this.color);
-
-  void _handleUserChanged(User newValue) {
-    setState(() {
-      user = newValue;
-    });
-  }
+  PlayerAvatar(this.match, this.team, this.user, this.onChanged);
 
   @override
   Widget build(BuildContext context) {
@@ -117,9 +131,9 @@ class _PlayerAvatarState extends State<PlayerAvatar> {
       );
     } else {
       hero = new CircleAvatar(
-          child: const Text('?'),
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.green,
+        child: const Text('?'),
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.green,
       );
     }
 
@@ -129,18 +143,18 @@ class _PlayerAvatarState extends State<PlayerAvatar> {
               .push(
                   context,
                   new MaterialPageRoute<User>(
-                    builder: (BuildContext context) => new PlayerDialog(),
+                    builder: (BuildContext context) => new PlayerDialog(this.match),
                     fullscreenDialog: true,
                   ))
               .then((user) {
-            _handleUserChanged(user);
+            onChanged(user);
           });
         },
         child: new Container(
             child: hero,
             padding: const EdgeInsets.all(3.0),
             decoration: new BoxDecoration(
-              color: color, // border color
+              color: team.color, // border color
               shape: BoxShape.circle,
             )));
   }
@@ -205,7 +219,7 @@ class MatchDetailHeader extends StatelessWidget {
               ),
               new Container(
                 padding: const EdgeInsets.only(top: 20.0),
-                child: new Score(),
+                child: new Score(this.match),
               ),
             ],
           ),
@@ -273,7 +287,7 @@ class GameList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new FutureBuilder(
-      future: MatchService.instance.instanciate(),
+      future: MatchService.instance.instantiateGames(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           default:
