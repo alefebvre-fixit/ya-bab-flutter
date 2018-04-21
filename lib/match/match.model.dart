@@ -9,9 +9,9 @@ class MatchMaking {
   final String id;
   final String groupId;
   final String ownerId;
-  final String date;
-  final int players;
-  final int bestOf;
+
+  DateTime date;
+  int bestOf;
 
   Team team1;
   Team team2;
@@ -21,7 +21,6 @@ class MatchMaking {
         this.groupId,
         this.ownerId,
         this.date,
-        this.players,
         this.bestOf
       }){
 
@@ -43,14 +42,13 @@ class MatchMaking {
     return false;
   }
 
-  factory MatchMaking.fromDocument(DocumentSnapshot json) {
+  factory MatchMaking.fromDocument(DocumentSnapshot document) {
     return new MatchMaking(
-      id: json['id'] as String,
-      groupId: json['groupId']  as String,
-      ownerId: json['ownerId'] as String,
-      date: json['date'] as String,
-      players: json['players'] as int,
-      bestOf: json['bestOf'] as int,
+      id: document.documentID,
+      groupId: document['groupId']  as String,
+      ownerId: document['ownerId'] as String,
+      date: document['date'] as DateTime,
+      bestOf: document['bestOf'] as int,
     );
   }
 
@@ -68,12 +66,16 @@ class MatchMaking {
       return this.date;
     });
 
-    result.putIfAbsent("players", () {
-      return this.players;
-    });
-
     result.putIfAbsent("bestOf", () {
       return this.bestOf;
+    });
+
+    result.putIfAbsent("team1", () {
+      return this.team1.toDocument();
+    });
+
+    result.putIfAbsent("team2", () {
+      return this.team2.toDocument();
     });
 
     return result;
@@ -106,6 +108,35 @@ class Team {
 
   User player1;
   User player2;
+
+  Map<String, dynamic> toDocument() {
+
+    var result = new Map<String, dynamic>();
+
+    result.putIfAbsent("name", () {
+      return this.name;
+    });
+
+    if (this.player1 != null && this.player1 != null){
+      result.putIfAbsent("player1", () {
+        return this.player1.toDocument();
+      });
+    } else {
+      result.remove("player1");
+    }
+
+    if (this.player2 != null && this.player2 != null){
+      result.putIfAbsent("player2", () {
+        return this.player2.toDocument();
+      });
+    } else {
+      result.remove("player2");
+    }
+
+
+    return result;
+
+  }
 
   bool isPlaying(String userId){
 

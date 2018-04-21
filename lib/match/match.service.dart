@@ -6,7 +6,12 @@ import 'package:yabab/match/match.model.dart';
 class MatchService {
   MatchService._();
 
+  final COLLECTION_MATCH = 'matchs';
+
+
   static MatchService _instance = new MatchService._();
+
+
 
   /// Gets the instance of MatchService for the default service app.
   static MatchService get instance => _instance;
@@ -17,7 +22,7 @@ class MatchService {
 
   Stream<List<MatchMaking>> findAll() {
     return Firestore.instance
-        .collection('match-makings')
+        .collection(COLLECTION_MATCH)
         .snapshots
         .map((query) => query.documents)
         .map((documents) => _fromDocuments(documents));
@@ -31,13 +36,13 @@ class MatchService {
 
   Future<DocumentReference> create(MatchMaking match) {
     return Firestore.instance
-        .collection('match-makings')
+        .collection(COLLECTION_MATCH)
         .add(match.toDocument());
   }
 
   Future<MatchMaking> findOne(String id) {
     return Firestore.instance
-        .collection('match-makings')
+        .collection(COLLECTION_MATCH)
         .document(id)
         .get()
         .then((document) => new MatchMaking.fromDocument(document));
@@ -45,7 +50,7 @@ class MatchService {
 
   Future<void> update(MatchMaking match) async {
     Firestore.instance
-        .collection('match-makings')
+        .collection(COLLECTION_MATCH)
         .document(match.id)
         .setData(match.toDocument());
   }
@@ -53,7 +58,7 @@ class MatchService {
   Future<void> upsert(MatchMaking match) {
     if (match.id != null) {
       return Firestore.instance
-          .collection('match-makings')
+          .collection(COLLECTION_MATCH)
           .document(match.id)
           .setData(match.toDocument());
     } else {
@@ -63,6 +68,10 @@ class MatchService {
 
   Future<MatchMaking> instantiateMatch() async {
     MatchMaking result = new MatchMaking();
+
+    result.bestOf = 3;
+    result.date = new DateTime.now();
+
 
     return result;
   }

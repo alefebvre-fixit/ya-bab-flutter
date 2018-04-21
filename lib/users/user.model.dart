@@ -18,6 +18,24 @@ class User {
         location: 'San Francisco');
   }
 
+  Map<String, dynamic> toDocument() {
+    var result = new Map<String, dynamic>();
+
+    result.putIfAbsent("displayName", () {
+      return this.name;
+    });
+
+    result.putIfAbsent("ownerId", () {
+      return this.email;
+    });
+
+    result.putIfAbsent("photoURL", () {
+      return this.avatar;
+    });
+
+    return result;
+  }
+
   static String _getAvatarURL(DocumentSnapshot document) {
     var name = document['displayName'] as String;
     var photoURL = document['photoURL'] as String;

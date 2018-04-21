@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:yabab/match/game.dialog.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:yabab/match/match.service.dart';
 import 'package:yabab/match/player.dialog.dart';
@@ -14,23 +15,37 @@ class MatchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
         body: new Column(
-      children: <Widget>[
-        new MatchDetailHeader(match),
-        new ExpansionTile(
-            title: const Text('Best of 3'),
-            backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
-            children: const <Widget>[
-              const ListTile(title: const Text('Best of 1')),
-              const ListTile(title: const Text('Best of 3')),
-              const ListTile(title: const Text('Best of 5')),
-            ]),
-        //new DetailedScore(),
-        new Expanded(child: new GameList(match))
+          children: <Widget>[
+            new MatchDetailHeader(match),
+            new ExpansionTile(
+                title: const Text('Best of 3'),
+                backgroundColor:
+                    Theme.of(context).accentColor.withOpacity(0.025),
+                children: const <Widget>[
+                  const ListTile(title: const Text('Best of 1')),
+                  const ListTile(title: const Text('Best of 3')),
+                  const ListTile(title: const Text('Best of 5')),
+                ]),
+            //new DetailedScore(),
+            new Expanded(child: new GameList(match))
 
-        // new Text("Current number: $_currentValue"),
-      ],
-    ));
+            // new Text("Current number: $_currentValue"),
+          ],
+        ),
+        floatingActionButton: new FloatingActionButton(
+          tooltip: 'Save',
+          child: new Icon(Icons.check),
+          onPressed: () {
+            _submit(context, this.match);
+          },
+        ));
   }
+}
+
+void _submit(BuildContext context, MatchMaking match) {
+  MatchService.instance.upsert(match);
+  Navigator.pop(context);
+
 }
 
 class Score extends StatefulWidget {
@@ -47,7 +62,6 @@ class _ScoreState extends State<Score> {
 
   _ScoreState(this.match);
 
-
   @override
   Widget build(BuildContext context) {
     return new Row(
@@ -59,18 +73,21 @@ class _ScoreState extends State<Score> {
             children: [
               new Container(
                   margin: const EdgeInsets.only(left: 26.0),
-                  child: new PlayerAvatar(match, match.team1, match.team1.player1, (user){
+                  child: new PlayerAvatar(
+                      match, match.team1, match.team1.player1, (user) {
                     setState(() {
                       this.match.team1.player1 = user;
                     });
                   })),
               new Container(
                   margin: const EdgeInsets.only(left: 12.0),
-                  child: new PlayerAvatar(match, match.team1, match.team1.player2, (user){
+                  child: new PlayerAvatar(
+                      match, match.team1, match.team1.player2, (user) {
                     setState(() {
                       this.match.team1.player2 = user;
                     });
-                  })),            ],
+                  })),
+            ],
           ))
         ]),
         new Expanded(
@@ -90,17 +107,21 @@ class _ScoreState extends State<Score> {
           children: [
             new Container(
                 margin: const EdgeInsets.only(right: 12.0),
-                child: new PlayerAvatar(match, match.team2, match.team2.player1, (user){
+                child: new PlayerAvatar(match, match.team2, match.team2.player1,
+                    (user) {
                   setState(() {
                     this.match.team2.player1 = user;
                   });
-                })),            new Container(
+                })),
+            new Container(
                 margin: const EdgeInsets.only(right: 26.0),
-                child: new PlayerAvatar(match, match.team2, match.team2.player2, (user){
+                child: new PlayerAvatar(match, match.team2, match.team2.player2,
+                    (user) {
                   setState(() {
                     this.match.team2.player2 = user;
                   });
-                })),          ],
+                })),
+          ],
         ))
       ],
     );
@@ -108,7 +129,6 @@ class _ScoreState extends State<Score> {
 }
 
 class PlayerAvatar extends StatelessWidget {
-
   final MatchMaking match;
   final Team team;
   final User user;
@@ -119,7 +139,6 @@ class PlayerAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User u;
 
     var hero;
     if (user != null) {
@@ -143,7 +162,8 @@ class PlayerAvatar extends StatelessWidget {
               .push(
                   context,
                   new MaterialPageRoute<User>(
-                    builder: (BuildContext context) => new PlayerDialog(this.match),
+                    builder: (BuildContext context) =>
+                        new PlayerDialog(this.match),
                     fullscreenDialog: true,
                   ))
               .then((user) {
@@ -202,10 +222,17 @@ class MatchDetailHeader extends StatelessWidget {
           backgroundColor: Colors.green.withAlpha(0),
           actions: <Widget>[
             new IconButton(
-              icon: const Icon(Icons.create),
-              tooltip: 'Edit',
-              onPressed: () {},
-            )
+                icon: const Icon(Icons.create),
+                tooltip: 'Edit',
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute<DismissDialogAction>(
+                        builder: (BuildContext context) =>
+                            new FullScreenDialogDemo(),
+                        fullscreenDialog: true,
+                      ));
+                })
           ],
         ),
         new Align(
