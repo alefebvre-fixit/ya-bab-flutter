@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yabab/shared/diagonal-image.dart';
+import 'package:yabab/users/user.avatar.dart';
 import 'package:yabab/users/user.model.dart';
 
 class UserDetailsPage extends StatefulWidget {
@@ -85,7 +86,7 @@ class UserDetailBody extends StatelessWidget {
         new Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: new Text(
-            user.location,
+            user.location != null ? user.location: '',
             style: textTheme.subhead.copyWith(color: Colors.white),
           ),
         ),
@@ -173,12 +174,11 @@ class UserDetailHeader extends StatelessWidget {
       color: Colors.green,
     );
 
-    var avatar = new Hero(
-      tag: user.id,
-      child: new CircleAvatar(
-        backgroundImage: new NetworkImage(user.avatar),
-        radius: 50.0,
-      ),
+
+
+    var avatar = new UserAvatarHero(
+      user: user,
+      radius: 50.0
     );
 
     var followerInfo = new Padding(

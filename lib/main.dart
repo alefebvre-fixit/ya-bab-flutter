@@ -13,7 +13,6 @@ import 'package:community_material_icon/community_material_icon.dart';
 final googleSignIn = new GoogleSignIn();
 final auth = FirebaseAuth.instance; // new
 
-final reference = Firestore.instance.collection('groups');
 
 void main() => runApp(new MyApp());
 
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Ya-Bab',
+      title: 'Foosball.io',
       theme: new ThemeData(
         // This is the theme of your application.
         //
@@ -52,11 +51,11 @@ class MyApp extends StatelessWidget {
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: new MyHomePage(title: 'Foosball.io'),
       routes: <String, WidgetBuilder>{
         //5
         '/screen1': (BuildContext context) =>
-            new MyHomePage(title: 'Flutter Demo Home Page'), //6
+            new MyHomePage(title: 'Foosball.io'), //6
         //'/screen2': (BuildContext context) => new LeagueWidget(null) //7
       },
     );

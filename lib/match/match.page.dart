@@ -4,6 +4,7 @@ import 'package:yabab/match/game.dialog.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:yabab/match/match.service.dart';
 import 'package:yabab/match/player.dialog.dart';
+import 'package:yabab/users/user.avatar.dart';
 import 'package:yabab/users/user.model.dart';
 
 class MatchWidget extends StatelessWidget {
@@ -45,7 +46,6 @@ class MatchWidget extends StatelessWidget {
 void _submit(BuildContext context, MatchMaking match) {
   MatchService.instance.upsert(match);
   Navigator.pop(context);
-
 }
 
 class Score extends StatefulWidget {
@@ -139,23 +139,6 @@ class PlayerAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    var hero;
-    if (user != null) {
-      hero = new Hero(
-        tag: user.id,
-        child: new CircleAvatar(
-          backgroundImage: new NetworkImage(user.avatar),
-        ),
-      );
-    } else {
-      hero = new CircleAvatar(
-        child: const Text('?'),
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.green,
-      );
-    }
-
     return new GestureDetector(
         onTap: () {
           Navigator
@@ -171,7 +154,7 @@ class PlayerAvatar extends StatelessWidget {
           });
         },
         child: new Container(
-            child: hero,
+            child: new UserAvatar(user),
             padding: const EdgeInsets.all(3.0),
             decoration: new BoxDecoration(
               color: team.color, // border color
@@ -332,40 +315,107 @@ class GameList extends StatelessWidget {
     return new ListView.builder(
       itemCount: values != null ? values.length : 0,
       itemBuilder: (BuildContext context, int index) {
-        return new Column(
-          children: <Widget>[
-            new GameListTile(values[index]),
-            new Divider(
-              height: 2.0,
-            ),
-          ],
-        );
+
+            return new GameListTile(this.match, values[index]);
       },
     );
   }
 }
 
 class GameListTile extends StatelessWidget {
-  final Game game;
 
-  GameListTile(this.game);
+  final Game game;
+  final MatchMaking match;
+
+  GameListTile(this.match, this.game);
+
+  _buildStar(BuildContext context, Team team, int score){
+
+    if (score == null){
+      return new Icon(
+        Icons.star_border,
+        color: Colors.black38,
+      );
+    }
+    else if (score >= 10){
+      return new Icon(
+        Icons.star,
+        color: team.color,
+      );
+    }
+    else {
+      return new Icon(
+        Icons.star_border,
+        color: Colors.black12,
+      );
+    }
+
+
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
     return new ListTile(
       onTap: () => {},
-      leading: new Hero(
-        tag: game.id,
-        child: new CircleAvatar(
-          child: new Text(game.id),
-        ),
+      leading: _buildStar(context, match.team1, game.scoreTeamA),
+    title: new GameScore(
+        game,
       ),
-      title: new Text(
-        '1' + ':' '2',
-        textAlign: TextAlign.center,
-        style:
-            Theme.of(context).textTheme.headline.copyWith(color: Colors.black),
+
+      trailing: _buildStar(context, match.team2, game.scoreTeamB)
+    );
+  }
+}
+
+
+class GameScore extends StatelessWidget {
+  final Game game;
+
+  GameScore(this.game);
+
+  _buildScoreText(BuildContext context, int score){
+
+    Color color = score != null ? Colors.black54 : Colors.black38;
+
+    return new Text(
+      score != null ? score.toString() : '-',
+      textAlign: TextAlign.center,
+      style:
+      Theme.of(context).textTheme.headline.copyWith(color: color),
+    );
+
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+
+    return new Container(
+      padding: const EdgeInsets.only(left: 80.0, right: 80.0),
+      color: new Color(0X33000000),
+      width: 20.0,
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildScoreText(context, game.scoreTeamA),
+          new Text(
+            ':',
+            textAlign: TextAlign.center,
+            style:
+            Theme.of(context).textTheme.headline.copyWith(color: Colors.black54),
+          ),
+          _buildScoreText(context, game.scoreTeamB),
+
+
+        ],
       ),
     );
+
+
+
   }
 }
