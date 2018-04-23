@@ -9,12 +9,26 @@ enum DismissDialogAction {
   save,
 }
 
-class FullScreenDialogDemo extends StatefulWidget {
+class GameDialog extends StatefulWidget {
+
+  final MatchMaking match;
+  final Game game;
+
+  GameDialog(this.match, this.game);
+
   @override
-  FullScreenDialogDemoState createState() => new FullScreenDialogDemoState();
+  GameDialogState createState() => new GameDialogState(this.match, this.game);
+
+
 }
 
-class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
+class GameDialogState extends State<GameDialog> {
+
+  final MatchMaking match;
+  final Game game;
+
+  GameDialogState(this.match, this.game);
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -28,11 +42,9 @@ class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
                 Navigator.pop(context, DismissDialogAction.save);
               })
         ]),
-        body: new GameScore(new MatchMaking(), new Game(id: "1", scoreTeamA: 0, scoreTeamB: 0)));
+        body: new GameScore(match, game));
   }
 }
-
-
 
 
 class GameScore extends StatefulWidget {

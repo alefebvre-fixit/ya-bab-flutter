@@ -208,13 +208,6 @@ class MatchDetailHeader extends StatelessWidget {
                 icon: const Icon(Icons.create),
                 tooltip: 'Edit',
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute<DismissDialogAction>(
-                        builder: (BuildContext context) =>
-                            new FullScreenDialogDemo(),
-                        fullscreenDialog: true,
-                      ));
                 })
           ],
         ),
@@ -349,7 +342,15 @@ class GameListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new ListTile(
-        onTap: () => {},
+        onTap: () {
+          Navigator.push(
+              context,
+              new MaterialPageRoute<DismissDialogAction>(
+                builder: (BuildContext context) =>
+                new GameDialog(match, game),
+                fullscreenDialog: true,
+              ));
+        },
         leading: _buildStar(context, match.team1, game.scoreTeamA),
         title: new GameScore(
           game,
