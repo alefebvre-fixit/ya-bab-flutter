@@ -70,7 +70,12 @@ class MatchCard extends StatelessWidget {
               children: <Widget>[
                 new FlatButton(
                   child: const Text('OPEN'),
-                  onPressed: () {},
+                  onPressed: () {
+                    _navigateToMatch(context, match);
+
+
+
+                  },
                 ),
               ],
             ),
@@ -148,10 +153,10 @@ class _ScoreState extends State<Score> {
 Future _createMatch(BuildContext context) async {
   MatchMaking match = await MatchService.instance.instantiateMatch();
 
-  _navigateToMatch(match, context);
+  _navigateToMatch(context, match);
 }
 
-void _navigateToMatch(MatchMaking match, BuildContext context) {
+void _navigateToMatch(BuildContext context, MatchMaking match) {
   Navigator.of(context).push(
     new MaterialPageRoute(
       builder: (c) {
