@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:yabab/users/user.model.dart';
-import 'package:yabab/users/user.page.dart';
-import 'package:yabab/users/user.service.dart';
 
 class UserAvatar extends StatelessWidget {
   final User user;
@@ -35,7 +33,7 @@ class UserAvatar extends StatelessWidget {
 
 class UserAvatarHero extends StatelessWidget {
   final User user;
-  double radius;
+  final double radius;
 
   UserAvatarHero({this.user, this.radius});
 

@@ -73,7 +73,7 @@ class _ScoreState extends State<Score> {
             children: [
               new Container(
                   margin: const EdgeInsets.only(left: 26.0),
-                  child: new PlayerAvatar(
+                  child: new _PlayerAvatar(
                       match, match.team1, match.team1.player1, (user) {
                     setState(() {
                       this.match.team1.player1 = user;
@@ -81,7 +81,7 @@ class _ScoreState extends State<Score> {
                   })),
               new Container(
                   margin: const EdgeInsets.only(left: 12.0),
-                  child: new PlayerAvatar(
+                  child: new _PlayerAvatar(
                       match, match.team1, match.team1.player2, (user) {
                     setState(() {
                       this.match.team1.player2 = user;
@@ -107,7 +107,7 @@ class _ScoreState extends State<Score> {
           children: [
             new Container(
                 margin: const EdgeInsets.only(right: 12.0),
-                child: new PlayerAvatar(match, match.team2, match.team2.player1,
+                child: new _PlayerAvatar(match, match.team2, match.team2.player1,
                     (user) {
                   setState(() {
                     this.match.team2.player1 = user;
@@ -115,7 +115,7 @@ class _ScoreState extends State<Score> {
                 })),
             new Container(
                 margin: const EdgeInsets.only(right: 26.0),
-                child: new PlayerAvatar(match, match.team2, match.team2.player2,
+                child: new _PlayerAvatar(match, match.team2, match.team2.player2,
                     (user) {
                   setState(() {
                     this.match.team2.player2 = user;
@@ -128,14 +128,14 @@ class _ScoreState extends State<Score> {
   }
 }
 
-class PlayerAvatar extends StatelessWidget {
+class _PlayerAvatar extends StatelessWidget {
   final MatchMaking match;
   final Team team;
   final User user;
 
   final ValueChanged<User> onChanged;
 
-  PlayerAvatar(this.match, this.team, this.user, this.onChanged);
+  _PlayerAvatar(this.match, this.team, this.user, this.onChanged);
 
   @override
   Widget build(BuildContext context) {

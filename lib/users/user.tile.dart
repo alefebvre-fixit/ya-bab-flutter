@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yabab/users/user.avatar.dart';
 import 'package:yabab/users/user.model.dart';
-import 'package:yabab/users/user.page.dart';
-import 'package:yabab/users/user.service.dart';
 
 class UserListTile extends StatelessWidget {
   final User user;

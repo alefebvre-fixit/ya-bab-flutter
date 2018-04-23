@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:yabab/match/match.page.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:yabab/match/match.service.dart';
-import 'package:yabab/users/user.avatar.dart';
-import 'package:yabab/users/user.model.dart';
+import 'package:yabab/match/player-avatar.dart';
+
 
 class MatchMakingListPage extends StatelessWidget {
   @override
@@ -142,27 +142,6 @@ class _ScoreState extends State<Score> {
         ))
       ],
     );
-  }
-}
-
-class PlayerAvatar extends StatelessWidget {
-  final MatchMaking match;
-  final Team team;
-  final User user;
-
-  PlayerAvatar(this.match, this.team, this.user);
-
-  @override
-  Widget build(BuildContext context) {
-    return new GestureDetector(
-        onTap: () {},
-        child: new Container(
-            child: new UserAvatar(user),
-            padding: const EdgeInsets.all(3.0),
-            decoration: new BoxDecoration(
-              color: team.color, // border color
-              shape: BoxShape.circle,
-            )));
   }
 }
 

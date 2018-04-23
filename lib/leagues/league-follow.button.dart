@@ -57,7 +57,7 @@ class _FollowButtonState extends State<LeagueFollowButton> {
     return showDialog<bool>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      child: new AlertDialog(
+      builder: (BuildContext context) => new AlertDialog(
         title: new Text('Unfollow'),
         content: new SingleChildScrollView(
           child: new ListBody(

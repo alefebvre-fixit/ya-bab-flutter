@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:yabab/match/match.model.dart';
+import 'package:yabab/match/player-avatar.dart';
 
 enum DismissDialogAction {
   cancel,
@@ -30,13 +31,6 @@ class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
         body: new GameScore(new MatchMaking(), new Game(id: "1", scoreTeamA: 0, scoreTeamB: 0)));
   }
 }
-
-
-
-
-
-
-
 
 
 
@@ -75,12 +69,12 @@ class _GameScoreState extends State<GameScore> {
             children: <Widget>[
               new Text('Game #' + game.id,
                   style: textTheme.headline.copyWith(color: Colors.green)),
-              new TeamScoreTable('Blue Team', Colors.blue),
+              new TeamScoreTable(game, match, match.team1),
               new Padding(
                   padding: new EdgeInsets.all(12.0),
                   child: new Text('VS',
                       style: textTheme.headline.copyWith(color: Colors.grey))),
-              new TeamScoreTable('Red Team', Colors.red),
+              new TeamScoreTable(game, match, match.team2),
             ],
           ),
         ));
@@ -94,23 +88,25 @@ class _GameScoreState extends State<GameScore> {
 
 class TeamScoreTable extends StatefulWidget {
 
-  TeamScoreTable(this.name, this.color);
+  TeamScoreTable(this.game, this.match, this.team);
 
-  final String name;
-  final Color color;
+  final MatchMaking match;
+  final Team team;
+  final Game game;
 
   @override
-  _ScoreTableState createState() => new _ScoreTableState(name, color);
+  _ScoreTableState createState() => new _ScoreTableState(game, match, team);
 }
 
 class _ScoreTableState extends State<TeamScoreTable> {
 
+  final MatchMaking match;
+  final Team team;
+  final Game game;
+
   int score = 99;
-  final String name;
-  final Color color;
 
-  _ScoreTableState(this.name, this.color);
-
+  _ScoreTableState(this.game, this.match, this.team);
 
   void _handleScoreChanged(int newValue) {
     setState(() {
@@ -120,8 +116,6 @@ class _ScoreTableState extends State<TeamScoreTable> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    var textTheme = theme.textTheme;
 
     var table = new Table(
         columnWidths: const <int, TableColumnWidth>{},
@@ -144,7 +138,26 @@ class _ScoreTableState extends State<TeamScoreTable> {
 
     return new Column(
       children: <Widget>[
-        new Text(name + ' [' + score.toString() + ']', style: textTheme.title.copyWith(color: color)),
+        //new Text(team.name + ' [' + score.toString() + ']', style: textTheme.title.copyWith(color: team.color)),
+        new Container(
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+
+              children: [
+                new Container(
+                    margin: const EdgeInsets.only(right: 12.0),
+                    child:
+                    new PlayerAvatar(match, team, team.player1)),
+                new Container(
+                    margin: const EdgeInsets.only(right: 0.0),
+                    child:
+                    new PlayerAvatar(match, team, team.player2)),
+              ],
+            )),
+
+
+
+
         table,
       ],
     );
@@ -156,7 +169,7 @@ class ScoreButton extends StatelessWidget {
   final int value;
   final int score;
 
-  ScoreButton({@required this.value: 0, @required this.score, @required this.onChanged})
+  ScoreButton({@required this.value, @required this.score, @required this.onChanged})
       : super();
 
   final ValueChanged<int> onChanged;
