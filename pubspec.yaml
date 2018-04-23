@@ -12,13 +12,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  image_picker: 0.3.1                                             # new
-  google_sign_in: 3.0.0                                           # new
-  firebase_analytics: 0.3.0                                       # new
-  firebase_auth: 0.5.2                                            # new
-  firebase_database: 0.4.1                                        # new
-  firebase_storage: 0.2.0                                         # new
-  cloud_firestore: 0.3.2
+  image_picker: 0.4.1                                             # new
+  google_sign_in: 3.0.2                                           # new
+  firebase_analytics: 0.3.3                                       # new
+  firebase_auth: 0.5.5                                            # new
+  firebase_database: 0.4.5                                        # new
+  firebase_storage: 0.2.5                                         # new
+  cloud_firestore: 0.6.3
   community_material_icon: 0.1.2                                  #https://pub.dartlang.org/packages/community_material_icon
   #rxdart: 0.16.0
   numberpicker: 0.1.0
