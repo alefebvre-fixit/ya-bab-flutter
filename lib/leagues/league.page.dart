@@ -20,21 +20,8 @@ class LeagueWidget extends StatelessWidget {
       children: <Widget>[
         new LeagueDetailHeader(league),
         new Container(
-          padding: const EdgeInsets.all(16.0),
-          child: new Row(children: <Widget>[
-            new Flexible(
-              child: new Text(league.name),
-            ),
-            new IconButton(
-                icon: new Icon(Icons.favorite),
-                onPressed: () {
-                  LeagueService.instance.findAllFollowers(league.id);
-                }),
-          ]),
-        ),
-        new Container(
             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-            child: new Text('some tet here')),
+            child: new Text('some text here')),
         new Expanded(child: new FollowerList(league))
       ],
     ));
@@ -109,7 +96,7 @@ class LeagueDetailHeader extends StatelessWidget {
             )
           ],
         ),
-        new Positioned(bottom: 26.0, left: 26.0, child: title),
+        new Positioned(bottom: 70.0, left: 26.0, child: title),
         new Positioned(
             bottom: 26.0, right: 26.0, child: new LeagueFollowButton(league))
       ],

@@ -14,11 +14,11 @@ class LeagueService {
   static LeagueService get instance => _instance;
 
   Stream<QuerySnapshot> findAllAsSnapshot() {
-    return Firestore.instance.collection('groups').snapshots;
+    return Firestore.instance.collection('leagues').snapshots;
   }
 
   Stream<List<League>> findAll(){
-    return Firestore.instance.collection('groups').snapshots.map((query) => query.documents).map( (documents) => _fromDocuments(documents));
+    return Firestore.instance.collection('leagues').snapshots.map((query) => query.documents).map( (documents) => _fromDocuments(documents));
   }
 
   List<League> _fromDocuments(List<DocumentSnapshot> documents){
@@ -26,12 +26,12 @@ class LeagueService {
   }
 
   Future<DocumentReference> create(League league) {
-    return Firestore.instance.collection('groups').add(league.toDocument());
+    return Firestore.instance.collection('leagues').add(league.toDocument());
   }
 
   Future<League> findOne(String id) {
     return Firestore.instance
-        .collection('groups')
+        .collection('leagues')
         .document(id)
         .get()
         .then((document) => new League.fromDocument(document));
@@ -39,7 +39,7 @@ class LeagueService {
 
   Future<void> update(League league) async {
     Firestore.instance
-        .collection('groups')
+        .collection('leagues')
         .document(league.id)
         .setData(league.toDocument());
   }
@@ -47,7 +47,7 @@ class LeagueService {
   Future<void> upsert(League league) {
     if (league.id != null) {
       return Firestore.instance
-          .collection('groups')
+          .collection('leagues')
           .document(league.id)
           .setData(league.toDocument());
     } else {
@@ -57,7 +57,7 @@ class LeagueService {
 
   Future<bool> isFollowing(String leagueId) {
     return Firestore.instance
-        .collection('groups/' + leagueId + '/followers')
+        .collection('leagues/' + leagueId + '/followers')
         .where('follower', isEqualTo: "XZYg8mMKrmS9xjVtn7yIScuMp622")
         .snapshots
         .first
@@ -69,7 +69,7 @@ class LeagueService {
   Future<void> follow(String leagueId) {
     return FirebaseAuth.instance.currentUser().then((user) {
       return Firestore.instance
-          .collection('groups/' + leagueId + '/followers')
+          .collection('leagues/' + leagueId + '/followers')
           .add({"follower": "XZYg8mMKrmS9xjVtn7yIScuMp622"});
     });
   }
@@ -77,7 +77,7 @@ class LeagueService {
   Future<void> unfollow(String leagueId) {
     return FirebaseAuth.instance.currentUser().then((user) {
       return Firestore.instance
-          .collection('groups/' + leagueId + '/followers')
+          .collection('leagues/' + leagueId + '/followers')
           .where('follower', isEqualTo: "XZYg8mMKrmS9xjVtn7yIScuMp622")
           .snapshots
           .first
@@ -91,7 +91,7 @@ class LeagueService {
 
   Future<QuerySnapshot> findAllFollowersAsSnapshot(String leagueId) {
     return Firestore.instance
-        .collection('groups/' + leagueId + '/followers')
+        .collection('leagues/' + leagueId + '/followers')
         .snapshots
         .first;
   }
@@ -100,12 +100,12 @@ class LeagueService {
   Future<List<User>> findAllFollowers(String leagueId) async {
     return Firestore
         .instance
-        .collection('groups/' + leagueId + '/followers').getDocuments()
+        .collection('leagues/' + leagueId + '/followers').getDocuments()
         .then((querySnapshot) => querySnapshot.documents)
         .then((documentSnapshots) => documentSnapshots.map((document) => document['follower'] as String))
         .then((ids) { print(ids); return ids; })
         .then( (ids) => ids.map( (id) => findOneUser(id) ))
-        .then((futurUsers) => Future.wait(futurUsers));
+        .then((futureUsers) => Future.wait(futureUsers));
   }
 
   Future<User> findOneUser(String id) {

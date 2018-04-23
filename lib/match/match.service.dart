@@ -79,9 +79,9 @@ class MatchService {
   Future<List<Game>> instantiateGames() async {
     List<Game> result = new List();
 
-    result.add(new Game(id: "1", scoreTeamA: 10, scoreTeamB: 4));
-    result.add(new Game(id: "2", scoreTeamA: 9, scoreTeamB: 10));
-    result.add(new Game(id: "3", scoreTeamA: null, scoreTeamB: null));
+    result.add(new Game(id: "1", scoreTeam1: 10, scoreTeam2: 4));
+    result.add(new Game(id: "2", scoreTeam1: 9, scoreTeam2: 10));
+    result.add(new Game(id: "3", scoreTeam1: null, scoreTeam2: null));
 
     return result;
   }

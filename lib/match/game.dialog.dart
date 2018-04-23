@@ -116,18 +116,18 @@ class _ScoreTableState extends State<TeamScoreTable> {
   final Team team;
   final Game game;
 
-  int score = 99;
-
   _ScoreTableState(this.game, this.match, this.team);
 
   void _handleScoreChanged(int newValue) {
     setState(() {
-      score = newValue;
+      //score = newValue;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    int score = game.getScore(team);
 
     var table = new Table(
         columnWidths: const <int, TableColumnWidth>{},

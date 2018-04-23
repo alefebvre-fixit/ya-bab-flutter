@@ -351,11 +351,11 @@ class GameListTile extends StatelessWidget {
                 fullscreenDialog: true,
               ));
         },
-        leading: _buildStar(context, match.team1, game.scoreTeamA),
+        leading: _buildStar(context, match.team1, game.scoreTeam1),
         title: new GameScore(
           game,
         ),
-        trailing: _buildStar(context, match.team2, game.scoreTeamB));
+        trailing: _buildStar(context, match.team2, game.scoreTeam2));
   }
 }
 
@@ -382,7 +382,7 @@ class GameScore extends StatelessWidget {
         children: [
           new Container(
             width: 40.0,
-            child: _buildScoreText(context, game.scoreTeamA),
+            child: _buildScoreText(context, game.scoreTeam1),
           ),
           new Container(
               width: 20.0,
@@ -397,7 +397,7 @@ class GameScore extends StatelessWidget {
               )),
           new Container(
             width: 40.0,
-            child: _buildScoreText(context, game.scoreTeamB),
+            child: _buildScoreText(context, game.scoreTeam2),
           ),
         ],
       ),

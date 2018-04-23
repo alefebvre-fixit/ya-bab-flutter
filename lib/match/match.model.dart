@@ -15,10 +15,9 @@ class MatchMaking {
   Team team1;
   Team team2;
 
-
   MatchMaking({this.id, this.groupId, this.ownerId, this.date, this.bestOf}) {
-    this.team1 = new Team('teamA', Colors.blue);
-    this.team2 = new Team('teamB', Colors.red);
+    this.team1 = new Team('team1', Colors.blue);
+    this.team2 = new Team('team2', Colors.red);
   }
 
   bool isPlaying(String userId) {
@@ -80,10 +79,20 @@ class MatchMaking {
 
 class Game {
   final String id;
-  final int scoreTeamA;
-  final int scoreTeamB;
+  final int scoreTeam1;
+  final int scoreTeam2;
 
-  Game({this.id, this.scoreTeamA, this.scoreTeamB});
+  Game({this.id, this.scoreTeam1, this.scoreTeam2});
+
+  int getScore(Team team) {
+    print('team.name=' + team.name);
+
+    if (team.name == 'team1') {
+      return scoreTeam1;
+    } else {
+      return scoreTeam2;
+    }
+  }
 }
 
 class Team {
