@@ -10,7 +10,6 @@ enum DismissDialogAction {
 }
 
 class GameDialog extends StatefulWidget {
-
   final MatchMaking match;
   final Game game;
 
@@ -18,12 +17,9 @@ class GameDialog extends StatefulWidget {
 
   @override
   GameDialogState createState() => new GameDialogState(this.match, this.game);
-
-
 }
 
 class GameDialogState extends State<GameDialog> {
-
   final MatchMaking match;
   final Game game;
 
@@ -46,142 +42,163 @@ class GameDialogState extends State<GameDialog> {
   }
 }
 
-
 class GameScore extends StatefulWidget {
-
-
   final MatchMaking match;
   final Game game;
 
   GameScore(this.match, this.game);
 
-
   @override
   _GameScoreState createState() => new _GameScoreState(match, game);
-
 }
 
 class _GameScoreState extends State<GameScore> {
-
   final MatchMaking match;
   final Game game;
+
+  void _handleScoreChanged(Team team, int newValue) {
+    setState(() {
+      if (this.game.getScore(team) == newValue) {
+        this.game.setScore(team, null);
+      } else {
+        this.game.setScore(team, newValue);
+      }
+    });
+  }
 
   _GameScoreState(this.match, this.game);
 
   @override
   Widget build(BuildContext context) {
-
     final ThemeData theme = Theme.of(context);
     var textTheme = theme.textTheme;
 
     return new Container(
         child: new Padding(
-          padding: new EdgeInsets.all(12.0),
-          child: new Column(
-            children: <Widget>[
-              new Text('Game #' + game.id,
-                  style: textTheme.headline.copyWith(color: Colors.green)),
-              new TeamScoreTable(game, match, match.team1),
-              new Padding(
-                  padding: new EdgeInsets.all(12.0),
-                  child: new Text('VS',
-                      style: textTheme.headline.copyWith(color: Colors.grey))),
-              new TeamScoreTable(game, match, match.team2),
-            ],
-          ),
-        ));
+      padding: new EdgeInsets.all(12.0),
+      child: new Column(
+        children: <Widget>[
+          new Text('Game #' + game.id,
+              style: textTheme.headline.copyWith(color: Colors.green)),
+          new TeamScoreTable(game, match, match.team1, (newValue) {
+            _handleScoreChanged(match.team1, newValue);
+          }),
+          new Padding(
+              padding: new EdgeInsets.all(12.0),
+              child: new Text('VS',
+                  style: textTheme.headline.copyWith(color: Colors.grey))),
+          new TeamScoreTable(game, match, match.team2, (newValue) {
+            _handleScoreChanged(match.team2, newValue);
+          }),
+        ],
+      ),
+    ));
+  }
+}
 
+class TeamScoreTable extends StatelessWidget {
+  TeamScoreTable(this.game, this.match, this.team, this.onChanged);
 
+  final MatchMaking match;
+  final Team team;
+  final Game game;
+  final ValueChanged<int> onChanged;
+
+  _buildScoreCell(int value, bool readOnly) {
+    int score = game.getScore(team);
+
+    return new TableCell(
+        verticalAlignment: TableCellVerticalAlignment.middle,
+        child: new Padding(
+            padding: new EdgeInsets.all(6.0),
+            child: new ScoreButton(
+                value: value, score: score, onChanged: onChanged, readOnly: readOnly)));
   }
 
-}
-
-
-
-class TeamScoreTable extends StatefulWidget {
-
-  TeamScoreTable(this.game, this.match, this.team);
-
-  final MatchMaking match;
-  final Team team;
-  final Game game;
-
-  @override
-  _ScoreTableState createState() => new _ScoreTableState(game, match, team);
-}
-
-class _ScoreTableState extends State<TeamScoreTable> {
-
-  final MatchMaking match;
-  final Team team;
-  final Game game;
-
-  _ScoreTableState(this.game, this.match, this.team);
-
-  void _handleScoreChanged(int newValue) {
-    setState(() {
-      //score = newValue;
-    });
+  _buildTable(bool readOnly){
+    return new Table(
+        columnWidths: const <int, TableColumnWidth>{},
+        children: <TableRow>[
+          new TableRow(children: <Widget>[
+            _buildScoreCell(0, readOnly),
+            _buildScoreCell(1, readOnly),
+            _buildScoreCell(2, readOnly),
+            _buildScoreCell(3, readOnly),
+            _buildScoreCell(4, readOnly),
+          ]),
+          new TableRow(children: <Widget>[
+            _buildScoreCell(5, readOnly),
+            _buildScoreCell(6, readOnly),
+            _buildScoreCell(7, readOnly),
+            _buildScoreCell(8, readOnly),
+            _buildScoreCell(9, readOnly),
+          ]),
+        ]);
   }
 
   @override
   Widget build(BuildContext context) {
-
     int score = game.getScore(team);
+    int oppositeScore = game.getOppositeScore(team);
 
-    var table = new Table(
-        columnWidths: const <int, TableColumnWidth>{},
-        children: <TableRow>[
-          new TableRow(children: <Widget>[
-            new ScoreButton(value: 0, score: score, onChanged: _handleScoreChanged),
-            new ScoreButton(value: 1, score: score, onChanged: _handleScoreChanged),
-            new ScoreButton(value: 2, score: score, onChanged: _handleScoreChanged),
-            new ScoreButton(value: 3, score: score, onChanged: _handleScoreChanged),
-            new ScoreButton(value: 4, score: score, onChanged: _handleScoreChanged),
-          ]),
-          new TableRow(children: <Widget>[
-            new ScoreButton(value: 5, score: score, onChanged: _handleScoreChanged),
-            new ScoreButton(value: 6, score: score, onChanged: _handleScoreChanged),
-            new ScoreButton(value: 7, score: score, onChanged: _handleScoreChanged),
-            new ScoreButton(value: 8, score: score, onChanged: _handleScoreChanged),
-            new ScoreButton(value: 9, score: score, onChanged: _handleScoreChanged),
-          ]),
-        ]);
 
-    return new Column(
+
+    var stack;
+    if (score == 10 || (score == null && oppositeScore != 10)) {
+      stack = new Stack(alignment: Alignment.center, children: [
+        new Opacity(
+          opacity: 0.1,
+          child: _buildTable(true),
+        ),
+        new ScoreButton(
+            size: 60.0, value: 10, score: score, onChanged: onChanged)
+      ]);
+    } else {
+      stack = new Stack(alignment: Alignment.center, children: [
+        new Opacity(
+          opacity: 0.1,
+          child: new ScoreButton(
+              size: 60.0, value: 10, score: score, onChanged: onChanged, readOnly: true),
+        ),
+        _buildTable(false)
+      ]);
+    }
+
+    var column = new Column(
       children: <Widget>[
         //new Text(team.name + ' [' + score.toString() + ']', style: textTheme.title.copyWith(color: team.color)),
         new Container(
             child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-
-              children: [
-                new Container(
-                    margin: const EdgeInsets.only(right: 12.0),
-                    child:
-                    new PlayerAvatar(match, team, team.player1)),
-                new Container(
-                    margin: const EdgeInsets.only(right: 0.0),
-                    child:
-                    new PlayerAvatar(match, team, team.player2)),
-              ],
-            )),
-
-
-
-
-        table,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            new Container(
+                margin: const EdgeInsets.only(right: 12.0),
+                child: new PlayerAvatar(match, team, team.player1)),
+            new Container(
+                margin: const EdgeInsets.only(right: 0.0),
+                child: new PlayerAvatar(match, team, team.player2)),
+          ],
+        )),
+        stack,
       ],
     );
+
+    return column;
   }
 }
 
 class ScoreButton extends StatelessWidget {
-
+  final bool readOnly;
   final int value;
   final int score;
+  final double size;
 
-  ScoreButton({@required this.value, @required this.score, @required this.onChanged})
+  ScoreButton(
+      {@required this.value,
+      @required this.score,
+      @required this.onChanged,
+      this.readOnly: false,
+      this.size})
       : super();
 
   final ValueChanged<int> onChanged;
@@ -190,32 +207,19 @@ class ScoreButton extends StatelessWidget {
     onChanged(value);
   }
 
-
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
 
-    var button = new FlatButton(
-        color: this.score == this.value ? Colors.green.shade100 : Colors.white10,
-        onPressed: this.onPressed,
+    return new FlatButton(
+        color: this.score == this.value ? Colors.green.shade100 : Colors.white,
+        onPressed: this.readOnly ? null : this.onPressed,
         shape: new CircleBorder(
           side: new BorderSide(width: 2.0, color: Colors.green.shade200),
         ),
         padding: new EdgeInsets.all(16.0),
         child: new Text(this.value.toString(),
-            style: textTheme.headline.copyWith(color: Colors.green)));
-
-
-
-    return new TableCell(
-        verticalAlignment: TableCellVerticalAlignment.middle,
-        child: new Padding(
-            padding: new EdgeInsets.all(6.0), child: button));
-
+            style: textTheme.headline
+                .copyWith(color: Colors.green, fontSize: size)));
   }
-
 }
-
-
-
-

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:yabab/match/game-list.dart';
 import 'package:yabab/match/game.dialog.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:yabab/match/match.service.dart';
@@ -27,10 +28,7 @@ class MatchWidget extends StatelessWidget {
                   const ListTile(title: const Text('Best of 3')),
                   const ListTile(title: const Text('Best of 5')),
                 ]),
-            //new DetailedScore(),
             new Expanded(child: new GameList(match))
-
-            // new Text("Current number: $_currentValue"),
           ],
         ),
         floatingActionButton: new FloatingActionButton(
@@ -92,14 +90,7 @@ class _ScoreState extends State<Score> {
         ]),
         new Expanded(
             child: new Container(
-          child: new Text(
-            '1' + ':' '2',
-            textAlign: TextAlign.center,
-            style: Theme
-                .of(context)
-                .textTheme
-                .display1
-                .copyWith(color: Colors.white),
+          child: new _MatchScore(match
           ),
         )),
         new Container(
@@ -107,16 +98,16 @@ class _ScoreState extends State<Score> {
           children: [
             new Container(
                 margin: const EdgeInsets.only(right: 12.0),
-                child: new _PlayerAvatar(match, match.team2, match.team2.player1,
-                    (user) {
+                child: new _PlayerAvatar(
+                    match, match.team2, match.team2.player1, (user) {
                   setState(() {
                     this.match.team2.player1 = user;
                   });
                 })),
             new Container(
                 margin: const EdgeInsets.only(right: 26.0),
-                child: new _PlayerAvatar(match, match.team2, match.team2.player2,
-                    (user) {
+                child: new _PlayerAvatar(
+                    match, match.team2, match.team2.player2, (user) {
                   setState(() {
                     this.match.team2.player2 = user;
                   });
@@ -127,6 +118,55 @@ class _ScoreState extends State<Score> {
     );
   }
 }
+
+
+class _MatchScore extends StatelessWidget {
+  final MatchMaking match;
+
+  _MatchScore(this.match);
+
+  _buildScoreText(BuildContext context, int score) {
+    Color color = score != null ? Colors.white : Colors.white;
+
+    return new Text(
+      score != null ? score.toString() : '-',
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.headline.copyWith(color: color),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          new Container(
+            width: 40.0,
+            child: _buildScoreText(context, match.scoreTeam1),
+          ),
+          new Container(
+              width: 20.0,
+              child: new Text(
+                ':',
+                textAlign: TextAlign.center,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline
+                    .copyWith(color: Colors.white),
+              )),
+          new Container(
+            width: 40.0,
+            child: _buildScoreText(context, match.scoreTeam2),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
 
 class _PlayerAvatar extends StatelessWidget {
   final MatchMaking match;
@@ -207,8 +247,7 @@ class MatchDetailHeader extends StatelessWidget {
             new IconButton(
                 icon: const Icon(Icons.create),
                 tooltip: 'Edit',
-                onPressed: () {
-                })
+                onPressed: () {})
           ],
         ),
         new Align(
@@ -278,129 +317,6 @@ class PhotoHero extends StatelessWidget {
               ),
             ),
           )),
-    );
-  }
-}
-
-class GameList extends StatelessWidget {
-  GameList(this.match);
-
-  final MatchMaking match;
-
-  @override
-  Widget build(BuildContext context) {
-    return new FutureBuilder(
-      future: MatchService.instance.instantiateGames(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        switch (snapshot.connectionState) {
-          default:
-            if (snapshot.hasError)
-              return new Text('Error: ${snapshot.error}');
-            else
-              return createListView(context, snapshot);
-        }
-      },
-    );
-  }
-
-  Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
-    List<Game> values = snapshot.data;
-    return new ListView.builder(
-      itemCount: values != null ? values.length : 0,
-      itemBuilder: (BuildContext context, int index) {
-        return new GameListTile(this.match, values[index]);
-      },
-    );
-  }
-}
-
-class GameListTile extends StatelessWidget {
-  final Game game;
-  final MatchMaking match;
-
-  GameListTile(this.match, this.game);
-
-  _buildStar(BuildContext context, Team team, int score) {
-    if (score == null) {
-      return new Icon(
-        Icons.star_border,
-        color: Colors.black38,
-      );
-    } else if (score >= 10) {
-      return new Icon(
-        Icons.star,
-        color: team.color,
-      );
-    } else {
-      return new Icon(
-        Icons.star_border,
-        color: Colors.black12,
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new ListTile(
-        onTap: () {
-          Navigator.push(
-              context,
-              new MaterialPageRoute<DismissDialogAction>(
-                builder: (BuildContext context) =>
-                new GameDialog(match, game),
-                fullscreenDialog: true,
-              ));
-        },
-        leading: _buildStar(context, match.team1, game.scoreTeam1),
-        title: new GameScore(
-          game,
-        ),
-        trailing: _buildStar(context, match.team2, game.scoreTeam2));
-  }
-}
-
-class GameScore extends StatelessWidget {
-  final Game game;
-
-  GameScore(this.game);
-
-  _buildScoreText(BuildContext context, int score) {
-    Color color = score != null ? Colors.black54 : Colors.black38;
-
-    return new Text(
-      score != null ? score.toString() : '-',
-      textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.headline.copyWith(color: color),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      child: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          new Container(
-            width: 40.0,
-            child: _buildScoreText(context, game.scoreTeam1),
-          ),
-          new Container(
-              width: 20.0,
-              child: new Text(
-                ':',
-                textAlign: TextAlign.center,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline
-                    .copyWith(color: Colors.black54),
-              )),
-          new Container(
-            width: 40.0,
-            child: _buildScoreText(context, game.scoreTeam2),
-          ),
-        ],
-      ),
     );
   }
 }
