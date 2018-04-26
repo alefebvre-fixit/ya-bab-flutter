@@ -247,7 +247,18 @@ class MatchDetailHeader extends StatelessWidget {
             new IconButton(
                 icon: const Icon(Icons.create),
                 tooltip: 'Edit',
-                onPressed: () {})
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute<DismissDialogAction>(
+                        builder: (BuildContext context) =>
+                        new GameDialog(match, null),
+                        fullscreenDialog: true,
+                      ));
+
+
+
+                })
           ],
         ),
         new Align(

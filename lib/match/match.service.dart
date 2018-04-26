@@ -71,12 +71,12 @@ class MatchService {
 
     result.bestOf = 3;
     result.date = new DateTime.now();
-
+    result.games = this._instantiateGames();
 
     return result;
   }
 
-  Future<List<Game>> instantiateGames() async {
+  List<Game> _instantiateGames() {
     List<Game> result = new List();
 
     result.add(new Game(id: "1", scoreTeam1: 10, scoreTeam2: 4));

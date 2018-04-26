@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yabab/match/game.dialog.dart';
+import 'package:yabab/match/game.dialog2.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:yabab/match/match.service.dart';
 
@@ -11,29 +11,15 @@ class GameList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new FutureBuilder(
-      future: MatchService.instance.instantiateGames(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        switch (snapshot.connectionState) {
-          default:
-            if (snapshot.hasError)
-              return new Text('Error: ${snapshot.error}');
-            else
-              return createListView(context, snapshot);
-        }
+
+    return new ListView.builder(
+      itemCount: match.games != null ? match.games.length : 0,
+      itemBuilder: (BuildContext context, int index) {
+        return new _GameListTile(this.match, match.games[index]);
       },
     );
   }
 
-  Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
-    List<Game> values = snapshot.data;
-    return new ListView.builder(
-      itemCount: values != null ? values.length : 0,
-      itemBuilder: (BuildContext context, int index) {
-        return new _GameListTile(this.match, values[index]);
-      },
-    );
-  }
 }
 
 class _GameListTile extends StatelessWidget {

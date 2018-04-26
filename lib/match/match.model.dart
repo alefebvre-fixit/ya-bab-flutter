@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:yabab/users/user.model.dart';
 
 class MatchMaking {
+
   final String id;
   final String groupId;
   final String ownerId;
@@ -17,6 +18,7 @@ class MatchMaking {
 
   int scoreTeam1;
   int scoreTeam2;
+  List<Game> games;
 
   MatchMaking({this.id, this.groupId, this.ownerId, this.date, this.bestOf}) {
     this.team1 = new Team('team1', Colors.blue);
@@ -60,6 +62,7 @@ class MatchMaking {
   }
 
   factory MatchMaking.fromDocument(DocumentSnapshot document) {
+
     MatchMaking result = new MatchMaking(
       id: document.documentID,
       groupId: document['groupId'] as String,
@@ -100,6 +103,22 @@ class MatchMaking {
       return this.team2.toData();
     });
 
+    print(games.length);
+    result.putIfAbsent("games", () {
+
+      var gameListData = new Map<String, dynamic>();
+
+      if (games != null && games.length > 0 ){
+        for (var i = 0; i < games.length; i++){
+          gameListData.putIfAbsent(i.toString(), () {
+            return games[i].toData();
+          });
+        }
+      }
+
+      return gameListData;
+    });
+
     return result;
   }
 }
@@ -111,6 +130,36 @@ class Game {
   int scoreTeam2;
 
   Game({this.id, this.scoreTeam1, this.scoreTeam2});
+
+
+  Map<String, dynamic> toData() {
+    var result = new Map<String, dynamic>();
+
+    result.putIfAbsent("id", () {
+      return this.id;
+    });
+    result.putIfAbsent("scoreTeam1", () {
+      return this.scoreTeam1;
+    });
+    result.putIfAbsent("scoreTeam2", () {
+      return this.scoreTeam2;
+    });
+
+    return result;
+  }
+
+  factory Game.fromData(final Map<dynamic, dynamic> data) {
+
+    Game result = new Game(
+      id: data['id'] as String,
+      scoreTeam1: data['scoreTeam1'] as int,
+      scoreTeam2: data['scoreTeam2'] as int,
+    );
+
+
+    return result;
+  }
+
 
   int getScore(Team team) {
     if (team.name == 'team1') {
