@@ -74,6 +74,18 @@ class MatchMaking {
     result.team1 = new Team.fromData(document['team1'], Colors.blue);
     result.team2 = new Team.fromData(document['team2'], Colors.red);
 
+
+    result.games = new List<Game>();
+
+    Map<dynamic, dynamic> games = document['games'];
+
+    if (games != null){
+      games.forEach((gameId, data) {
+        result.games.add(new Game.fromData(data));
+        });
+    }
+
+
     return result;
   }
 
@@ -103,7 +115,6 @@ class MatchMaking {
       return this.team2.toData();
     });
 
-    print(games.length);
     result.putIfAbsent("games", () {
 
       var gameListData = new Map<String, dynamic>();
