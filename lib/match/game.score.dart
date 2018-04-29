@@ -3,45 +3,6 @@ import 'package:meta/meta.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:yabab/match/player-avatar.dart';
 
-enum DismissDialogAction {
-  cancel,
-  discard,
-  save,
-}
-
-class GameDialog extends StatefulWidget {
-  final MatchMaking match;
-  final Game game;
-
-  GameDialog(this.match, this.game);
-
-  @override
-  GameDialogState createState() => new GameDialogState(this.match, this.game);
-}
-
-class GameDialogState extends State<GameDialog> {
-  final MatchMaking match;
-  final Game game;
-
-  GameDialogState(this.match, this.game);
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
-    return new Scaffold(
-        appBar: new AppBar(title: const Text('Match Score'), actions: <Widget>[
-          new FlatButton(
-              child: new Text('SAVE',
-                  style: theme.textTheme.body1.copyWith(color: Colors.white)),
-              onPressed: () {
-                Navigator.pop(context, DismissDialogAction.save);
-              })
-        ]),
-        body: new GameScore(match, game));
-  }
-}
-
 class GameScore extends StatefulWidget {
   final MatchMaking match;
   final Game game;
@@ -112,10 +73,13 @@ class TeamScoreTable extends StatelessWidget {
         child: new Padding(
             padding: new EdgeInsets.all(6.0),
             child: new ScoreButton(
-                value: value, score: score, onChanged: onChanged, readOnly: readOnly)));
+                value: value,
+                score: score,
+                onChanged: onChanged,
+                readOnly: readOnly)));
   }
 
-  _buildTable(bool readOnly){
+  _buildTable(bool readOnly) {
     return new Table(
         columnWidths: const <int, TableColumnWidth>{},
         children: <TableRow>[
@@ -141,8 +105,6 @@ class TeamScoreTable extends StatelessWidget {
     int score = game.getScore(team);
     int oppositeScore = game.getOppositeScore(team);
 
-
-
     var stack;
     if (score == 10 || (score == null && oppositeScore != 10)) {
       stack = new Stack(alignment: Alignment.center, children: [
@@ -158,7 +120,11 @@ class TeamScoreTable extends StatelessWidget {
         new Opacity(
           opacity: 0.1,
           child: new ScoreButton(
-              size: 60.0, value: 10, score: score, onChanged: onChanged, readOnly: true),
+              size: 60.0,
+              value: 10,
+              score: score,
+              onChanged: onChanged,
+              readOnly: true),
         ),
         _buildTable(false)
       ]);

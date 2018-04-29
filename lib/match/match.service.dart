@@ -71,17 +71,17 @@ class MatchService {
 
     result.bestOf = 3;
     result.date = new DateTime.now();
-    result.games = this._instantiateGames();
+    result.games = this._instantiateGames(result.bestOf);
 
     return result;
   }
 
-  List<Game> _instantiateGames() {
+  List<Game> _instantiateGames(int size) {
     List<Game> result = new List();
 
-    result.add(new Game(id: "1", scoreTeam1: 10, scoreTeam2: 4));
-    result.add(new Game(id: "2", scoreTeam1: 9, scoreTeam2: 10));
-    result.add(new Game(id: "3", scoreTeam1: null, scoreTeam2: null));
+    for (var i = 1; i <= size; i++) {
+      result.add(new Game(id: i.toString(), scoreTeam1: null, scoreTeam2: null));
+    }
 
     return result;
   }

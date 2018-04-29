@@ -255,9 +255,6 @@ class MatchDetailHeader extends StatelessWidget {
                         new GameDialog(match, null),
                         fullscreenDialog: true,
                       ));
-
-
-
                 })
           ],
         ),

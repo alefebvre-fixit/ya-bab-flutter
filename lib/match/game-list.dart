@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yabab/match/game.dialog2.dart';
+import 'package:yabab/match/game.dialog.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:yabab/match/match.service.dart';
 

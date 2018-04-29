@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yabab/match/game.score.dart';
 import 'package:yabab/match/match.model.dart';
 
 enum DismissDialogAction {
@@ -14,21 +15,27 @@ class GameDialog extends StatefulWidget {
   GameDialog(this.match, this.game);
 
   @override
-  _GameDialogState createState() => new _GameDialogState(match);
+  _GameDialogState createState() => new _GameDialogState(match, game);
 }
 
 class _GameDialogState extends State<GameDialog>
     with SingleTickerProviderStateMixin {
   final MatchMaking match;
+  final Game game;
+
   TabController _tabController;
 
-  _GameDialogState(this.match);
+  _GameDialogState(this.match, this.game);
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(
         vsync: this, length: match.games != null ? match.games.length : 0);
+
+    if (game != null) {
+      _tabController.animateTo(int.parse(game.id) - 1);
+    }
   }
 
   @override
@@ -62,7 +69,9 @@ class _GameDialogState extends State<GameDialog>
       ),
       body: new TabBarView(
         controller: _tabController,
-        children: [],
+        children: this.match.games.map((aGame) {
+          return new GameScore(match, aGame);
+        }).toList(),
       ),
     );
   }
