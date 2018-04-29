@@ -25,7 +25,15 @@ class _GameDialogState extends State<GameDialog>
 
   TabController _tabController;
 
-  _GameDialogState(this.match, this.game);
+  var pristine = true;
+
+  _GameDialogState(this.match, this.game) {
+    this.match.games.forEach((game) {
+      if (game.isScoreSet()) {
+        pristine = false;
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -70,7 +78,17 @@ class _GameDialogState extends State<GameDialog>
       body: new TabBarView(
         controller: _tabController,
         children: this.match.games.map((aGame) {
-          return new GameScore(match, aGame);
+          return new GameScore(
+              match: match,
+              game: aGame,
+              onScoreSet: () {
+                String winner = match.getWinner();
+                if (pristine && winner != null) {
+                  Navigator.of(context).pop();
+                } else {
+                  this._nextPage(1);
+                }
+              });
         }).toList(),
       ),
     );

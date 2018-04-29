@@ -4,18 +4,22 @@ import 'package:yabab/match/match.model.dart';
 import 'package:yabab/match/player-avatar.dart';
 
 class GameScore extends StatefulWidget {
+
   final MatchMaking match;
   final Game game;
+  final Function onScoreSet;
 
-  GameScore(this.match, this.game);
+  GameScore({@required this.match, @required this.game, this.onScoreSet});
 
   @override
-  _GameScoreState createState() => new _GameScoreState(match, game);
+  _GameScoreState createState() => new _GameScoreState(match: match, game: game, onScoreSet: onScoreSet);
 }
 
 class _GameScoreState extends State<GameScore> {
+
   final MatchMaking match;
   final Game game;
+  final Function onScoreSet;
 
   void _handleScoreChanged(Team team, int newValue) {
     setState(() {
@@ -24,10 +28,16 @@ class _GameScoreState extends State<GameScore> {
       } else {
         this.game.setScore(team, newValue);
       }
+
+      this.match.calculateScore();
+
+      if (game.isScoreSet()){
+        this.onScoreSet();
+      }
     });
   }
 
-  _GameScoreState(this.match, this.game);
+  _GameScoreState({@required this.match, @required this.game, this.onScoreSet});
 
   @override
   Widget build(BuildContext context) {
