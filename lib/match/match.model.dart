@@ -70,11 +70,12 @@ class MatchMaking {
   String _getWinner(int target) {
     var result = null;
 
-    if (this.scoreTeam1 >= target) {
+    if (this.scoreTeam1 != null && this.scoreTeam1 >= target) {
       result = Team.TEAM_1;
-    } else if (this.scoreTeam2 >= target) {
+    } else if (this.scoreTeam2 != null && this.scoreTeam2 >= target) {
       result = Team.TEAM_2;
     }
+
     return result;
   }
 
@@ -100,9 +101,22 @@ class MatchMaking {
         }
       }
     });
+
+    var winner = getWinner();
+
+    if (winner == Team.TEAM_1) {
+      if (this.scoreTeam2 == null) {
+        this.scoreTeam2 = 0;
+      }
+    } else if (winner == Team.TEAM_2) {
+      if (this.scoreTeam1 == null) {
+        this.scoreTeam1 = 0;
+      }
+    }
   }
 
   bool isPlaying(String userId) {
+
     if (this.team1 != null && team1.isPlaying(userId)) {
       return true;
     }

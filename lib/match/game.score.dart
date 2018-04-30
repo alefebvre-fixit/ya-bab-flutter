@@ -115,6 +115,10 @@ class TeamScoreTable extends StatelessWidget {
     int score = game.getScore(team);
     int oppositeScore = game.getOppositeScore(team);
 
+
+    
+
+
     var stack;
     if (score == 10 || (score == null && oppositeScore != 10)) {
       stack = new Stack(alignment: Alignment.center, children: [

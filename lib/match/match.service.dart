@@ -48,6 +48,12 @@ class MatchService {
         .then((document) => new MatchMaking.fromDocument(document));
   }
 
+  Future<void> delete(String id) {
+    return Firestore.instance
+        .collection(COLLECTION_MATCH)
+        .document(id).delete();
+  }
+
   Future<void> update(MatchMaking match) async {
     Firestore.instance
         .collection(COLLECTION_MATCH)

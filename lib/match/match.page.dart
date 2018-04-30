@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:yabab/match/game-list.dart';
-import 'package:yabab/match/game.dialog.dart';
 import 'package:yabab/match/match.model.dart';
 import 'package:yabab/match/match.service.dart';
 import 'package:yabab/match/player.dialog.dart';
@@ -90,8 +91,7 @@ class _ScoreState extends State<Score> {
         ]),
         new Expanded(
             child: new Container(
-          child: new _MatchScore(match
-          ),
+          child: new _MatchScore(match),
         )),
         new Container(
             child: new Row(
@@ -118,7 +118,6 @@ class _ScoreState extends State<Score> {
     );
   }
 }
-
 
 class _MatchScore extends StatelessWidget {
   final MatchMaking match;
@@ -166,7 +165,7 @@ class _MatchScore extends StatelessWidget {
   }
 }
 
-
+enum MatchAction { discardMatch }
 
 class _PlayerAvatar extends StatelessWidget {
   final MatchMaking match;
@@ -210,6 +209,44 @@ class MatchDetailHeader extends StatelessWidget {
 
   final MatchMaking match;
 
+  Future<Null> _discardMatch(BuildContext context) async {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Are you sure?'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('Match data will be lost.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            new FlatButton(
+              child: new Text('DISCARD'),
+              onPressed: () {
+                if (this.match.id != null){
+                  MatchService.instance.delete(this.match.id);
+                }
+
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var photo = new PhotoHero(
@@ -244,18 +281,21 @@ class MatchDetailHeader extends StatelessWidget {
           bottomOpacity: 0.0,
           backgroundColor: Colors.green.withAlpha(0),
           actions: <Widget>[
-            new IconButton(
-                icon: const Icon(Icons.create),
-                tooltip: 'Edit',
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute<DismissDialogAction>(
-                        builder: (BuildContext context) =>
-                        new GameDialog(match, null),
-                        fullscreenDialog: true,
-                      ));
-                })
+            new PopupMenuButton<MatchAction>(
+              onSelected: (MatchAction value) {
+                if (value == MatchAction.discardMatch) {
+                  this._discardMatch(context);
+                }
+              },
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<MatchAction>>[
+                    const PopupMenuItem<MatchAction>(
+                        value: MatchAction.discardMatch,
+                        child: const ListTile(
+                            leading: const Icon(Icons.delete),
+                            title: const Text('Discard')))
+                  ],
+            ),
           ],
         ),
         new Align(
