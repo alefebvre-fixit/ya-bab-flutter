@@ -116,7 +116,7 @@ class TeamScoreTable extends StatelessWidget {
     int oppositeScore = game.getOppositeScore(team);
 
 
-    
+
 
 
     var stack;

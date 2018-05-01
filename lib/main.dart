@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: new AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
-          title: new Text('Ya-Bab'),
+          title: new Text('fusball.io'),
           actions: <Widget>[
             new PopupMenuButton<YaBabAction>(
               onSelected: (YaBabAction value) =>
